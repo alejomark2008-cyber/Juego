@@ -1,141 +1,265 @@
-const startButton = document.getElementById("start-button");
-const startScreen = document.getElementById("start-screen");
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+
+const startButton = document.getElementById("start-button");
+const startScreen = document.getElementById("start-screen");
 
 const leftButton = document.getElementById("left-button");
 const rightButton = document.getElementById("right-button");
 const jumpButton = document.getElementById("jump-button");
 
-let playing = false;
+let gameStarted = false;
 
-let left = false;
-let right = false;
+let moveLeft = false;
+let moveRight = false;
 
-const player = {
-  x: 60,
-  y: 0,
-  width: 30,
-  height: 40,
-  speed: 5,
-  velocityY: 0,
-  gravity: 0.7,
-  jumpPower: -13,
-  onGround: false
-};
+let playerX = 60;
+let playerY = 0;
+
+let playerSpeed = 5;
+
+let velocityY = 0;
+
+let gravity = 0.7;
+
+let jumping = false;
 
 let groundY = 0;
 
-/* AJUSTAR EL TAMAÑO */
+/* AJUSTAR EL CANVAS */
 
-function resizeGame() {
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
+function setupGame() {
 
-  groundY = canvas.height - 85;
+  canvas.width =
+    canvas.offsetWidth;
 
-  if (!playing) {
-    drawStartScene();
-  }
+  canvas.height =
+    canvas.offsetHeight;
+
+  groundY =
+    canvas.height - 85;
+
+  playerY =
+    groundY - 40;
+
+  drawGame();
 }
 
-/* INICIAR */
+/* INICIAR EL JUEGO */
 
-startButton.addEventListener("click", function () {
-  startScreen.style.display = "none";
+startButton.onclick = function () {
 
-  playing = true;
+  gameStarted = true;
 
-  player.x = 60;
+  startScreen.style.display =
+    "none";
 
-  player.y =
-    groundY -
-    player.height;
+  playerX = 60;
 
-  player.velocityY = 0;
+  playerY =
+    groundY - 40;
 
-  requestAnimationFrame(gameLoop);
-});
+  velocityY = 0;
 
-/* MOVIMIENTO */
+  jumping = false;
 
-function update() {
+  gameLoop();
+};
 
-  if (left) {
-    player.x -= player.speed;
-  }
+/* MOVER A LA IZQUIERDA */
 
-  if (right) {
-    player.x += player.speed;
-  }
+leftButton.onmousedown =
+function () {
 
-  if (player.x < 0) {
-    player.x = 0;
-  }
+  moveLeft = true;
+};
 
-  if (
-    player.x +
-    player.width >
-    canvas.width
-  ) {
-    player.x =
-      canvas.width -
-      player.width;
-  }
+leftButton.onmouseup =
+function () {
 
-  player.velocityY +=
-    player.gravity;
+  moveLeft = false;
+};
 
-  player.y +=
-    player.velocityY;
+leftButton.ontouchstart =
+function (event) {
 
-  if (
-    player.y +
-    player.height >=
-    groundY
-  ) {
-    player.y =
-      groundY -
-      player.height;
+  event.preventDefault();
 
-    player.velocityY = 0;
+  moveLeft = true;
+};
 
-    player.onGround = true;
-  }
+leftButton.ontouchend =
+function (event) {
 
-  if (
-    player.y >
-    canvas.height + 100
-  ) {
-    player.x = 60;
+  event.preventDefault();
 
-    player.y =
-      groundY -
-      player.height;
+  moveLeft = false;
+};
 
-    player.velocityY = 0;
-  }
-}
+/* MOVER A LA DERECHA */
+
+rightButton.onmousedown =
+function () {
+
+  moveRight = true;
+};
+
+rightButton.onmouseup =
+function () {
+
+  moveRight = false;
+};
+
+rightButton.ontouchstart =
+function (event) {
+
+  event.preventDefault();
+
+  moveRight = true;
+};
+
+rightButton.ontouchend =
+function (event) {
+
+  event.preventDefault();
+
+  moveRight = false;
+};
 
 /* SALTAR */
+
+jumpButton.onclick =
+function () {
+
+  jump();
+};
+
+jumpButton.ontouchstart =
+function (event) {
+
+  event.preventDefault();
+
+  jump();
+};
 
 function jump() {
 
   if (
-    playing &&
-    player.onGround
+    gameStarted &&
+    !jumping
   ) {
-    player.velocityY =
-      player.jumpPower;
 
-    player.onGround = false;
+    velocityY = -13;
+
+    jumping = true;
+  }
+}
+
+/* TECLADO */
+
+document.onkeydown =
+function (event) {
+
+  if (
+    event.key ===
+    "ArrowLeft"
+  ) {
+
+    moveLeft = true;
+  }
+
+  if (
+    event.key ===
+    "ArrowRight"
+  ) {
+
+    moveRight = true;
+  }
+
+  if (
+    event.key ===
+    "ArrowUp" ||
+    event.key ===
+    " "
+  ) {
+
+    jump();
+  }
+};
+
+document.onkeyup =
+function (event) {
+
+  if (
+    event.key ===
+    "ArrowLeft"
+  ) {
+
+    moveLeft = false;
+  }
+
+  if (
+    event.key ===
+    "ArrowRight"
+  ) {
+
+    moveRight = false;
+  }
+};
+
+/* ACTUALIZAR */
+
+function updateGame() {
+
+  if (moveLeft) {
+
+    playerX -=
+      playerSpeed;
+  }
+
+  if (moveRight) {
+
+    playerX +=
+      playerSpeed;
+  }
+
+  if (playerX < 0) {
+
+    playerX = 0;
+  }
+
+  if (
+    playerX >
+    canvas.width - 30
+  ) {
+
+    playerX =
+      canvas.width - 30;
+  }
+
+  velocityY +=
+    gravity;
+
+  playerY +=
+    velocityY;
+
+  if (
+    playerY + 40 >=
+    groundY
+  ) {
+
+    playerY =
+      groundY - 40;
+
+    velocityY = 0;
+
+    jumping = false;
   }
 }
 
 /* DIBUJAR */
 
-function draw() {
+function drawGame() {
 
   const background =
     ctx.createLinearGradient(
@@ -143,65 +267,3 @@ function draw() {
       0,
       0,
       canvas.height
-    );
-
-  background.addColorStop(
-    0,
-    "#27323c"
-  );
-
-  background.addColorStop(
-    0.55,
-    "#080d12"
-  );
-
-  background.addColorStop(
-    1,
-    "#020304"
-  );
-
-  ctx.fillStyle =
-    background;
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  /* CUADRÍCULA */
-
-  ctx.strokeStyle =
-    "rgba(255,255,255,0.05)";
-
-  for (
-    let x = 0;
-    x < canvas.width;
-    x += 45
-  ) {
-    ctx.beginPath();
-
-    ctx.moveTo(x, 0);
-
-    ctx.lineTo(
-      x,
-      canvas.height
-    );
-
-    ctx.stroke();
-  }
-
-  /* SUELO */
-
-  const floor =
-    ctx.createLinearGradient(
-      0,
-      groundY,
-      0,
-      canvas.height
-    );
-
-  floor.addColorStop(
-    0,
-    "#d
