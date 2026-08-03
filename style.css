@@ -1,6 +1,6 @@
-/* ==============================
+/* ==================================
    CHAIN RUSH — ESTILO FUTURISTA
-================================ */
+================================== */
 
 :root {
   --black: #030405;
@@ -27,6 +27,7 @@ body {
 
 body {
   color: var(--white);
+
   font-family:
     Arial,
     Helvetica,
@@ -40,7 +41,7 @@ body {
     ),
     radial-gradient(
       circle at 10% 90%,
-      rgba(170, 185, 205, 0.1),
+      rgba(170, 185, 205, 0.10),
       transparent 30%
     ),
     linear-gradient(
@@ -55,8 +56,11 @@ body {
 
 .background-effects {
   position: fixed;
+
   inset: 0;
+
   z-index: -1;
+
   pointer-events: none;
 
   background-image:
@@ -70,7 +74,8 @@ body {
       transparent 1px
     );
 
-  background-size: 50px 50px;
+  background-size:
+    50px 50px;
 
   mask-image:
     linear-gradient(
@@ -80,17 +85,21 @@ body {
     );
 }
 
-/* Contenedor principal */
+/* Página principal */
 
 .game-page {
   width: min(1400px, 100%);
+
   min-height: 100vh;
 
   margin: auto;
+
   padding: 20px;
 
   display: flex;
+
   flex-direction: column;
+
   justify-content: center;
 
   gap: 15px;
@@ -102,7 +111,9 @@ body {
   width: 100%;
 
   display: flex;
+
   align-items: center;
+
   justify-content: space-between;
 
   padding:
@@ -125,6 +136,7 @@ body {
   box-shadow:
     0 0 25px
     rgba(180, 200, 220, 0.08),
+
     inset 0 1px 0
     rgba(255, 255, 255, 0.12);
 
@@ -134,15 +146,19 @@ body {
 
 .game-logo {
   display: flex;
+
   align-items: center;
+
   gap: 13px;
 }
 
 .logo-chain {
   width: 52px;
+
   height: 52px;
 
   display: grid;
+
   place-items: center;
 
   font-size: 28px;
@@ -184,6 +200,7 @@ body {
     );
 
   -webkit-background-clip: text;
+
   background-clip: text;
 
   color: transparent;
@@ -221,7 +238,7 @@ body {
       230,
       240,
       250,
-      0.2
+      0.20
     );
 
   border-radius: 12px;
@@ -231,7 +248,7 @@ body {
       0,
       0,
       0,
-      0.3
+      0.30
     );
 }
 
@@ -245,7 +262,7 @@ body {
       255,
       255,
       255,
-      0.5
+      0.50
     );
 
   letter-spacing: 3px;
@@ -281,7 +298,7 @@ body {
       220,
       230,
       240,
-      0.3
+      0.30
     );
 
   border-radius: 22px;
@@ -299,8 +316,9 @@ body {
       0,
       0,
       0,
-      0.7
+      0.70
     ),
+
     0 0 35px
     rgba(
       200,
@@ -310,10 +328,9 @@ body {
     );
 }
 
-/* Lienzo */
-
 #gameCanvas {
   width: 100%;
+
   height: auto;
 
   display: block;
@@ -336,6 +353,7 @@ body {
   z-index: 10;
 
   display: grid;
+
   place-items: center;
 
   padding: 20px;
@@ -349,12 +367,14 @@ body {
         0,
         0.82
       ),
+
       rgba(
         0,
         0,
         0,
         0.35
       ),
+
       rgba(
         0,
         0,
@@ -373,7 +393,9 @@ body {
 
 .game-overlay.hidden {
   opacity: 0;
+
   visibility: hidden;
+
   pointer-events: none;
 }
 
@@ -410,6 +432,7 @@ body {
         255,
         0.12
       ),
+
       rgba(
         255,
         255,
@@ -426,6 +449,7 @@ body {
       240,
       0.13
     ),
+
     inset 0 1px 0
     rgba(
       255,
@@ -475,18 +499,10 @@ body {
     );
 
   -webkit-background-clip: text;
+
   background-clip: text;
 
   color: transparent;
-
-  text-shadow:
-    0 0 30px
-    rgba(
-      230,
-      240,
-      255,
-      0.15
-    );
 }
 
 .start-card > p {
@@ -509,7 +525,7 @@ body {
   font-size: 14px;
 }
 
-/* Botón jugar */
+/* Botón */
 
 #start-button {
   border: none;
@@ -543,7 +559,7 @@ body {
       230,
       240,
       255,
-      0.4
+      0.40
     );
 
   transition:
@@ -577,6 +593,7 @@ body {
   margin-top: 28px;
 
   display: flex;
+
   justify-content: center;
 
   gap: 35px;
@@ -584,6 +601,7 @@ body {
 
 .control-item {
   display: flex;
+
   flex-wrap: wrap;
 
   justify-content: center;
@@ -596,7 +614,8 @@ body {
 .control-item p {
   width: 100%;
 
-  margin: 5px 0 0;
+  margin:
+    5px 0 0;
 
   color:
     rgba(
@@ -655,6 +674,7 @@ body {
   position: absolute;
 
   top: 20px;
+
   left: 50%;
 
   z-index: 5;
@@ -684,7 +704,7 @@ body {
       5,
       7,
       10,
-      0.7
+      0.70
     );
 
   backdrop-filter:
@@ -720,7 +740,7 @@ body {
       255,
       255,
       255,
-      0.5
+      0.50
     );
 
   font-size: 8px;
@@ -775,12 +795,15 @@ body {
 
 .status {
   display: flex;
+
   align-items: center;
+
   gap: 8px;
 }
 
 .status-dot {
   width: 8px;
+
   height: 8px;
 
   border-radius: 50%;
@@ -807,6 +830,7 @@ body {
 
 .progress-bar {
   width: 100%;
+
   height: 5px;
 
   overflow: hidden;
@@ -824,6 +848,7 @@ body {
 
 .progress-fill {
   width: 0%;
+
   height: 100%;
 
   border-radius: inherit;
@@ -841,7 +866,7 @@ body {
       255,
       255,
       255,
-      0.7
+      0.70
     );
 
   transition:
@@ -852,13 +877,83 @@ body {
   text-align: right;
 }
 
+/* Créditos */
+
+.creditos {
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 18px;
+
+  padding:
+    8px
+    15px;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.40
+    );
+
+  font-size: 8px;
+
+  letter-spacing: 3px;
+
+  text-align: center;
+}
+
+.creditos span {
+  padding-right: 18px;
+
+  border-right:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+}
+
+.creditos strong {
+  color:
+    rgba(
+      230,
+      240,
+      250,
+      0.72
+    );
+
+  font-size: 8px;
+
+  letter-spacing: 3px;
+
+  text-shadow:
+    0 0 10px
+    rgba(
+      220,
+      235,
+      255,
+      0.20
+    );
+}
+
 /* Botones para celular */
 
 .mobile-controls {
   position: absolute;
 
   left: 0;
+
   right: 0;
+
   bottom: 14px;
 
   z-index: 8;
@@ -876,6 +971,7 @@ body {
 
 .mobile-button {
   width: 60px;
+
   height: 60px;
 
   border:
@@ -884,7 +980,7 @@ body {
       255,
       255,
       255,
-      0.3
+      0.30
     );
 
   border-radius: 17px;
@@ -899,7 +995,7 @@ body {
       20,
       25,
       31,
-      0.8
+      0.80
     );
 
   box-shadow:
@@ -923,12 +1019,13 @@ body {
   margin-left: auto;
 }
 
-/* Adaptación para celular */
+/* Celulares */
 
 @media (max-width: 700px) {
 
   .game-page {
     padding: 8px;
+
     gap: 8px;
   }
 
@@ -942,6 +1039,7 @@ body {
 
   .logo-chain {
     width: 40px;
+
     height: 40px;
 
     font-size: 20px;
@@ -955,11 +1053,13 @@ body {
 
   .game-logo h1 {
     font-size: 20px;
+
     letter-spacing: 3px;
   }
 
   .game-logo p {
     font-size: 7px;
+
     letter-spacing: 3px;
   }
 
@@ -1028,6 +1128,28 @@ body {
     text-align: right;
   }
 
+  .creditos {
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding:
+      7px
+      10px;
+
+    font-size: 7px;
+  }
+
+  .creditos span {
+    padding-right: 0;
+
+    border-right: none;
+  }
+
+  .creditos strong {
+    font-size: 7px;
+  }
+
   .game-message {
     top: 10px;
 
@@ -1040,4 +1162,4 @@ body {
     font-size: 10px;
   }
 
-      }
+   }
