@@ -12,613 +12,478 @@ const leftButton = document.getElementById("left-button");
 const rightButton = document.getElementById("right-button");
 const jumpButton = document.getElementById("jump-button");
 
-let running = false;
-let animationId = null;
+/* =========================
+   ESTADO DEL JUEGO
+========================= */
 
-let level = 1;
+let gameRunning = false;
+let gameState = "start";
+
+let currentLevel = 1;
 let deaths = 0;
 
 let moveLeft = false;
 let moveRight = false;
 
+let animationId = null;
+
 let cameraX = 0;
-let worldWidth = 2600;
+let worldWidth = 2800;
 
 const player = {
   x: 55,
   y: 0,
   width: 28,
   height: 40,
-  speed: 4.4,
+  speed: 4.5,
   velocityY: 0,
   gravity: 0.62,
-  jumpPower: -12.2,
+  jumpPower: -12,
   onGround: false
 };
 
-let world = {
+const world = {
   groundY: 0,
   platforms: [],
   spikes: [],
   hiddenSpikes: [],
   fallingPlatforms: [],
-  disappearingBlocks: [],
   door: null
 };
 
-
 /* =========================
-   TAMAÑO DEL JUEGO
+   CANVAS
 ========================= */
 
 function resizeCanvas() {
-  canvas.width =
-    Math.max(
-      320,
-      canvas.clientWidth
-    );
+  const width = canvas.clientWidth || 360;
+  const height = canvas.clientHeight || 500;
 
-  canvas.height =
-    Math.max(
-      480,
-      canvas.clientHeight
-    );
+  canvas.width = Math.max(320, width);
+  canvas.height = Math.max(430, height);
 
-  if (!running) {
-    drawPreview();
+  if (!gameRunning) {
+    drawBackground();
   }
 }
-
 
 /* =========================
-   CREAR NIVELES
+   AYUDAS PARA CREAR MAPAS
 ========================= */
 
-function createLevel() {
-  world.groundY =
-    canvas.height - 88;
-
-  world.platforms = [];
-
-  world.spikes = [];
-
-  world.hiddenSpikes = [];
-
-  world.fallingPlatforms = [];
-
-  world.disappearingBlocks = [];
-
-  cameraX = 0;
-
-  if (level === 1) {
-    createLevelOne();
-  }
-
-  if (level === 2) {
-    createLevelTwo();
-  }
-
-  if (level === 3) {
-    createLevelThree();
-  }
-
-  resetPlayer(false);
-}
-
-
-function ground(x, width) {
+function addGround(x, width) {
   world.platforms.push({
     x: x,
     y: world.groundY,
     width: width,
-    height:
-      canvas.height -
-      world.groundY,
+    height: canvas.height - world.groundY,
     type: "ground"
   });
 }
 
-
-function platform(
-  x,
-  y,
-  width,
-  height = 18
-) {
+function addPlatform(x, y, width) {
   world.platforms.push({
-    x,
-    y,
-    width,
-    height,
+    x: x,
+    y: y,
+    width: width,
+    height: 18,
     type: "platform"
   });
 }
 
-
-function spike(
-  x,
-  width = 28
-) {
+function addSpike(x, width = 28) {
   world.spikes.push({
-    x,
-    y:
-      world.groundY - 30,
-    width,
+    x: x,
+    y: world.groundY - 30,
+    width: width,
     height: 30
   });
 }
 
-
-function hiddenSpike(
-  triggerX,
-  spikeX
-) {
+function addHiddenSpike(triggerX, x) {
   world.hiddenSpikes.push({
-    triggerX,
-    x: spikeX,
-    y:
-      world.groundY - 32,
+    triggerX: triggerX,
+    x: x,
+    y: world.groundY - 31,
     width: 30,
-    height: 32,
+    height: 31,
     active: false
   });
 }
 
-
-function fallingPlatform(
-  x,
-  y,
-  width
-) {
+function addFallingPlatform(x, y, width) {
   world.fallingPlatforms.push({
-    x,
-    y,
-    width,
+    x: x,
+    startY: y,
+    y: y,
+    width: width,
     height: 18,
     falling: false,
     velocityY: 0
   });
 }
 
+/* =========================
+   CREAR EL NIVEL
+========================= */
 
-function disappearingBlock(
-  x,
-  width
-) {
-  world.disappearingBlocks.push({
-    x,
-    y: world.groundY,
-    width,
-    height:
-      canvas.height -
-      world.groundY,
-    active: true,
-    timer: 0
-  });
+function createLevel() {
+  world.groundY = canvas.height - 88;
+
+  world.platforms = [];
+  world.spikes = [];
+  world.hiddenSpikes = [];
+  world.fallingPlatforms = [];
+
+  cameraX = 0;
+
+  if (currentLevel === 1) {
+    createLevel1();
+  }
+
+  if (currentLevel === 2) {
+    createLevel2();
+  }
+
+  if (currentLevel === 3) {
+    createLevel3();
+  }
+
+  resetPlayer(false);
 }
-
 
 /* =========================
    NIVEL 1
 ========================= */
 
-function createLevelOne() {
-  worldWidth = 2700;
+function createLevel1() {
+  worldWidth = 2600;
 
-  ground(0, 380);
+  addGround(0, 380);
+  addGround(470, 340);
+  addGround(930, 330);
+  addGround(1390, 340);
+  addGround(1860, 300);
+  addGround(2290, 310);
 
-  ground(470, 310);
-
-  ground(900, 280);
-
-  ground(1290, 350);
-
-  ground(1760, 300);
-
-  ground(2180, 520);
-
-  platform(
-    350,
-    world.groundY - 75,
-    95
-  );
-
-  platform(
-    650,
-    world.groundY - 110,
+  addPlatform(
+    330,
+    world.groundY - 80,
     110
   );
 
-  platform(
-    1080,
-    world.groundY - 100,
-    100
-  );
-
-  platform(
-    1480,
-    world.groundY - 85,
-    100
-  );
-
-  platform(
-    1900,
+  addPlatform(
+    690,
     world.groundY - 105,
     120
   );
 
-  spike(610);
-
-  spike(1020);
-
-  spike(1100);
-
-  spike(1510);
-
-  hiddenSpike(
-    1350,
-    1450
+  addPlatform(
+    1120,
+    world.groundY - 95,
+    110
   );
 
-  hiddenSpike(
-    1840,
-    1940
+  addPlatform(
+    1580,
+    world.groundY - 120,
+    120
   );
 
-  fallingPlatform(
+  addPlatform(
+    2040,
+    world.groundY - 100,
+    120
+  );
+
+  addSpike(590);
+  addSpike(1040);
+  addSpike(1510);
+  addSpike(1970);
+
+  addHiddenSpike(1350, 1460);
+  addHiddenSpike(1880, 1990);
+
+  addFallingPlatform(
     820,
     world.groundY - 90,
-    85
-  );
-
-  disappearingBlock(
-    1610,
-    130
+    90
   );
 
   world.door = {
-    x: 2580,
-    y:
-      world.groundY - 66,
-    width: 40,
+    x: 2510,
+    y: world.groundY - 66,
+    width: 42,
     height: 66
   };
 }
-
 
 /* =========================
    NIVEL 2
 ========================= */
 
-function createLevelTwo() {
-  worldWidth = 3300;
+function createLevel2() {
+  worldWidth = 3400;
 
-  ground(0, 300);
+  addGround(0, 300);
+  addGround(420, 260);
+  addGround(810, 230);
+  addGround(1160, 280);
+  addGround(1570, 250);
+  addGround(1940, 270);
+  addGround(2340, 280);
+  addGround(2760, 640);
 
-  ground(420, 250);
-
-  ground(790, 210);
-
-  ground(1120, 280);
-
-  ground(1540, 220);
-
-  ground(1880, 280);
-
-  ground(2300, 300);
-
-  ground(2730, 570);
-
-  platform(
-    280,
+  addPlatform(
+    270,
     world.groundY - 95,
-    110
-  );
-
-  platform(
-    620,
-    world.groundY - 130,
     120
   );
 
-  platform(
-    960,
+  addPlatform(
+    650,
+    world.groundY - 125,
+    110
+  );
+
+  addPlatform(
+    1010,
     world.groundY - 100,
-    110
-  );
-
-  platform(
-    1320,
-    world.groundY - 145,
-    100
-  );
-
-  platform(
-    1730,
-    world.groundY - 110,
     120
   );
 
-  platform(
-    2130,
+  addPlatform(
+    1400,
+    world.groundY - 145,
+    120
+  );
+
+  addPlatform(
+    1800,
+    world.groundY - 105,
+    110
+  );
+
+  addPlatform(
+    2190,
     world.groundY - 135,
     110
   );
 
-  platform(
-    2570,
-    world.groundY - 100,
-    110
+  addPlatform(
+    2600,
+    world.groundY - 110,
+    120
   );
 
-  spike(500);
+  addSpike(510);
+  addSpike(890);
+  addSpike(1230);
+  addSpike(1290);
+  addSpike(1660);
+  addSpike(2020);
+  addSpike(2430);
+  addSpike(2490);
 
-  spike(850);
+  addHiddenSpike(960, 1070);
+  addHiddenSpike(1740, 1850);
+  addHiddenSpike(2530, 2660);
 
-  spike(1200);
-
-  spike(1260);
-
-  spike(1640);
-
-  spike(1980);
-
-  spike(2390);
-
-  spike(2450);
-
-  hiddenSpike(
-    950,
-    1040
-  );
-
-  hiddenSpike(
-    1750,
-    1840
-  );
-
-  hiddenSpike(
-    2580,
-    2670
-  );
-
-  fallingPlatform(
-    720,
+  addFallingPlatform(
+    730,
     world.groundY - 105,
-    70
+    75
   );
 
-  fallingPlatform(
-    1450,
-    world.groundY - 120,
-    80
-  );
-
-  fallingPlatform(
-    2210,
+  addFallingPlatform(
+    1510,
     world.groundY - 115,
     80
   );
 
-  disappearingBlock(
-    1390,
-    150
-  );
-
-  disappearingBlock(
-    2150,
-    150
+  addFallingPlatform(
+    2270,
+    world.groundY - 110,
+    80
   );
 
   world.door = {
-    x: 3170,
-    y:
-      world.groundY - 66,
-    width: 40,
+    x: 3270,
+    y: world.groundY - 66,
+    width: 42,
     height: 66
   };
 }
-
 
 /* =========================
    NIVEL 3
 ========================= */
 
-function createLevelThree() {
-  worldWidth = 4000;
+function createLevel3() {
+  worldWidth = 4200;
 
-  ground(0, 280);
+  addGround(0, 280);
+  addGround(410, 230);
+  addGround(770, 210);
+  addGround(1110, 250);
+  addGround(1500, 210);
+  addGround(1850, 240);
+  addGround(2240, 210);
+  addGround(2590, 230);
+  addGround(2970, 220);
+  addGround(3340, 860);
 
-  ground(410, 220);
-
-  ground(760, 190);
-
-  ground(1080, 260);
-
-  ground(1480, 190);
-
-  ground(1810, 230);
-
-  ground(2180, 200);
-
-  ground(2520, 220);
-
-  ground(2890, 210);
-
-  ground(3250, 750);
-
-  platform(
-    260,
+  addPlatform(
+    250,
     world.groundY - 100,
-    100
+    110
   );
 
-  platform(
-    610,
+  addPlatform(
+    620,
     world.groundY - 135,
-    100
-  );
-
-  platform(
-    940,
-    world.groundY - 110,
     110
   );
 
-  platform(
-    1300,
-    world.groundY - 155,
-    100
-  );
-
-  platform(
-    1670,
-    world.groundY - 120,
+  addPlatform(
+    970,
+    world.groundY - 105,
     110
   );
 
-  platform(
-    2030,
+  addPlatform(
+    1360,
     world.groundY - 150,
     110
   );
 
-  platform(
-    2380,
-    world.groundY - 120,
+  addPlatform(
+    1740,
+    world.groundY - 115,
     110
   );
 
-  platform(
-    2740,
+  addPlatform(
+    2100,
+    world.groundY - 150,
+    110
+  );
+
+  addPlatform(
+    2480,
+    world.groundY - 115,
+    110
+  );
+
+  addPlatform(
+    2840,
     world.groundY - 145,
     110
   );
 
-  platform(
-    3110,
+  addPlatform(
+    3210,
     world.groundY - 110,
     110
   );
 
-  spike(470);
+  addSpike(480);
+  addSpike(850);
+  addSpike(1180);
+  addSpike(1240);
+  addSpike(1570);
+  addSpike(1910);
+  addSpike(1970);
+  addSpike(2310);
+  addSpike(2660);
+  addSpike(2720);
+  addSpike(3040);
+  addSpike(3100);
 
-  spike(820);
+  addHiddenSpike(590, 700);
+  addHiddenSpike(1320, 1440);
+  addHiddenSpike(2040, 2160);
+  addHiddenSpike(2770, 2890);
+  addHiddenSpike(3260, 3380);
 
-  spike(1140);
-
-  spike(1200);
-
-  spike(1550);
-
-  spike(1880);
-
-  spike(1940);
-
-  spike(2250);
-
-  spike(2600);
-
-  spike(2660);
-
-  spike(2970);
-
-  spike(3040);
-
-  hiddenSpike(
-    580,
-    690
+  addFallingPlatform(
+    700,
+    world.groundY - 110,
+    75
   );
 
-  hiddenSpike(
-    1320,
-    1420
-  );
-
-  hiddenSpike(
-    2010,
-    2120
-  );
-
-  hiddenSpike(
-    2750,
-    2860
-  );
-
-  hiddenSpike(
-    3200,
-    3300
-  );
-
-  fallingPlatform(
-    690,
-    world.groundY - 115,
-    70
-  );
-
-  fallingPlatform(
-    1390,
+  addFallingPlatform(
+    1450,
     world.groundY - 125,
-    75
+    80
   );
 
-  fallingPlatform(
-    2110,
+  addFallingPlatform(
+    2180,
     world.groundY - 120,
-    75
+    80
   );
 
-  fallingPlatform(
-    2830,
+  addFallingPlatform(
+    2920,
     world.groundY - 120,
-    75
-  );
-
-  disappearingBlock(
-    950,
-    130
-  );
-
-  disappearingBlock(
-    1670,
-    140
-  );
-
-  disappearingBlock(
-    2380,
-    140
-  );
-
-  disappearingBlock(
-    3100,
-    150
+    80
   );
 
   world.door = {
-    x: 3870,
-    y:
-      world.groundY - 66,
-    width: 40,
+    x: 4070,
+    y: world.groundY - 66,
+    width: 42,
     height: 66
   };
 }
 
-
 /* =========================
-   REINICIAR
+   INICIAR Y REINICIAR
 ========================= */
 
-function resetPlayer(
-  countDeath = true
-) {
+function startNewGame() {
+  currentLevel = 1;
+  deaths = 0;
+
+  levelNumber.textContent = currentLevel;
+  deathCount.textContent = deaths;
+
+  progressFill.style.width = "0%";
+
+  createLevel();
+
+  startScreen.classList.add("hidden");
+
+  gameState = "playing";
+  gameRunning = true;
+
+  cancelAnimationFrame(animationId);
+
+  gameLoop();
+}
+
+function continueGame() {
+  createLevel();
+
+  startScreen.classList.add("hidden");
+
+  gameState = "playing";
+  gameRunning = true;
+
+  cancelAnimationFrame(animationId);
+
+  gameLoop();
+}
+
+function resetPlayer(countDeath = true) {
   if (countDeath) {
     deaths++;
 
-    deathCount.textContent =
-      deaths;
+    deathCount.textContent = deaths;
   }
 
-  player.x = 50;
+  player.x = 55;
 
   player.y =
     world.groundY -
@@ -629,7 +494,6 @@ function resetPlayer(
   player.onGround = true;
 
   moveLeft = false;
-
   moveRight = false;
 
   cameraX = 0;
@@ -642,52 +506,35 @@ function resetPlayer(
 
   world.fallingPlatforms.forEach(
     block => {
+      block.y = block.startY;
       block.falling = false;
-
       block.velocityY = 0;
-    }
-  );
-
-  world.disappearingBlocks.forEach(
-    block => {
-      block.active = true;
-
-      block.timer = 0;
     }
   );
 }
 
-
 /* =========================
-   MOVIMIENTO
+   ACTUALIZAR
 ========================= */
 
-function update() {
+function updateGame() {
   if (moveLeft) {
-    player.x -=
-      player.speed;
+    player.x -= player.speed;
   }
 
   if (moveRight) {
-    player.x +=
-      player.speed;
+    player.x += player.speed;
   }
 
-  player.velocityY +=
-    player.gravity;
+  player.velocityY += player.gravity;
 
-  player.y +=
-    player.velocityY;
+  player.y += player.velocityY;
 
   player.onGround = false;
 
   resolvePlatforms();
 
-  updateFallingPlatforms();
-
-  updateHiddenSpikes();
-
-  updateDisappearingBlocks();
+  updateTraps();
 
   if (player.x < 0) {
     player.x = 0;
@@ -705,7 +552,7 @@ function update() {
 
   if (
     player.y >
-    canvas.height + 100
+    canvas.height + 120
   ) {
     resetPlayer(true);
   }
@@ -719,24 +566,17 @@ function update() {
   updateProgress();
 }
 
-
 /* =========================
-   COLISIONES
+   PLATAFORMAS
 ========================= */
 
 function resolvePlatforms() {
-  const allPlatforms = [
+  const blocks = [
     ...world.platforms,
-    ...world.fallingPlatforms,
-    ...world.disappearingBlocks.filter(
-      block =>
-        block.active
-    )
+    ...world.fallingPlatforms
   ];
 
-  for (
-    const block of allPlatforms
-  ) {
+  for (const block of blocks) {
     const previousBottom =
       player.y +
       player.height -
@@ -780,24 +620,15 @@ function resolvePlatforms() {
       ) {
         block.falling = true;
       }
-
-      if (
-        world.disappearingBlocks.includes(
-          block
-        )
-      ) {
-        block.timer++;
-      }
     }
   }
 }
-
 
 /* =========================
    TRAMPAS
 ========================= */
 
-function updateHiddenSpikes() {
+function updateTraps() {
   world.hiddenSpikes.forEach(
     trap => {
       if (
@@ -808,17 +639,11 @@ function updateHiddenSpikes() {
       }
     }
   );
-}
 
-
-function updateFallingPlatforms() {
   world.fallingPlatforms.forEach(
     block => {
-      if (
-        block.falling
-      ) {
-        block.velocityY +=
-          0.45;
+      if (block.falling) {
+        block.velocityY += 0.42;
 
         block.y +=
           block.velocityY;
@@ -827,32 +652,15 @@ function updateFallingPlatforms() {
   );
 }
 
-
-function updateDisappearingBlocks() {
-  world.disappearingBlocks.forEach(
-    block => {
-      if (
-        block.timer > 15
-      ) {
-        block.active = false;
-      }
-    }
-  );
-}
-
-
 function checkSpikes() {
   const allSpikes = [
     ...world.spikes,
     ...world.hiddenSpikes.filter(
-      trap =>
-        trap.active
+      trap => trap.active
     )
   ];
 
-  for (
-    const trap of allSpikes
-  ) {
+  for (const trap of allSpikes) {
     const hit =
       player.x +
       player.width >
@@ -878,16 +686,14 @@ function checkSpikes() {
   }
 }
 
-
 /* =========================
    PUERTA
 ========================= */
 
 function checkDoor() {
-  const door =
-    world.door;
+  const door = world.door;
 
-  const touching =
+  const touchingDoor =
     player.x +
     player.width >
     door.x &&
@@ -904,48 +710,37 @@ function checkDoor() {
     door.y +
     door.height;
 
-  if (touching) {
+  if (touchingDoor) {
     completeLevel();
   }
 }
 
-
 function completeLevel() {
-  running = false;
+  gameRunning = false;
 
-  progressFill.style.width =
-    "100%";
+  cancelAnimationFrame(
+    animationId
+  );
 
-  if (
-    level < 3
-  ) {
-    level++;
+  progressFill.style.width = "100%";
+
+  if (currentLevel < 3) {
+    currentLevel++;
 
     levelNumber.textContent =
-      level;
+      currentLevel;
+
+    gameState = "next";
 
     startButton.textContent =
       "CONTINUAR AL NIVEL " +
-      level;
+      currentLevel;
 
     startScreen.classList.remove(
       "hidden"
     );
-
-    startButton.onclick =
-      () => {
-        startScreen.classList.add(
-          "hidden"
-        );
-
-        running = true;
-
-        createLevel();
-
-        gameLoop();
-      };
-
   } else {
+    gameState = "finished";
 
     startButton.textContent =
       "✓ PROTOTIPO COMPLETADO";
@@ -956,9 +751,8 @@ function completeLevel() {
   }
 }
 
-
 /* =========================
-   CÁMARA Y PROGRESO
+   CÁMARA
 ========================= */
 
 function updateCamera() {
@@ -967,10 +761,8 @@ function updateCamera() {
     canvas.width * 0.35;
 
   cameraX +=
-    (
-      target -
-      cameraX
-    ) * 0.08;
+    (target - cameraX) *
+    0.09;
 
   cameraX =
     Math.max(
@@ -983,9 +775,8 @@ function updateCamera() {
     );
 }
 
-
 function updateProgress() {
-  const value =
+  const progress =
     Math.max(
       0,
       Math.min(
@@ -998,17 +789,16 @@ function updateProgress() {
     );
 
   progressFill.style.width =
-    value + "%";
+    progress + "%";
 }
 
-
 /* =========================
-   SALTO
+   SALTAR
 ========================= */
 
 function jump() {
   if (
-    running &&
+    gameRunning &&
     player.onGround
   ) {
     player.velocityY =
@@ -1018,12 +808,11 @@ function jump() {
   }
 }
 
-
 /* =========================
    DIBUJAR
 ========================= */
 
-function draw() {
+function drawGame() {
   drawBackground();
 
   ctx.save();
@@ -1033,15 +822,25 @@ function draw() {
     0
   );
 
-  drawPlatforms();
+  world.platforms.forEach(
+    drawBlock
+  );
 
-  drawDisappearingBlocks();
+  world.fallingPlatforms.forEach(
+    drawBlock
+  );
 
-  drawFallingPlatforms();
+  world.spikes.forEach(
+    drawSpike
+  );
 
-  drawSpikes();
-
-  drawHiddenSpikes();
+  world.hiddenSpikes.forEach(
+    trap => {
+      if (trap.active) {
+        drawSpike(trap);
+      }
+    }
+  );
 
   drawDoor();
 
@@ -1049,7 +848,6 @@ function draw() {
 
   ctx.restore();
 }
-
 
 function drawBackground() {
   const gradient =
@@ -1062,12 +860,12 @@ function drawBackground() {
 
   gradient.addColorStop(
     0,
-    "#202933"
+    "#202a34"
   );
 
   gradient.addColorStop(
     0.5,
-    "#090d12"
+    "#080d12"
   );
 
   gradient.addColorStop(
@@ -1075,8 +873,7 @@ function drawBackground() {
     "#020304"
   );
 
-  ctx.fillStyle =
-    gradient;
+  ctx.fillStyle = gradient;
 
   ctx.fillRect(
     0,
@@ -1090,16 +887,12 @@ function drawBackground() {
 
   for (
     let x = 0;
-    x <
-    canvas.width;
+    x < canvas.width;
     x += 45
   ) {
     ctx.beginPath();
 
-    ctx.moveTo(
-      x,
-      0
-    );
+    ctx.moveTo(x, 0);
 
     ctx.lineTo(
       x,
@@ -1111,16 +904,12 @@ function drawBackground() {
 
   for (
     let y = 0;
-    y <
-    canvas.height;
+    y < canvas.height;
     y += 45
   ) {
     ctx.beginPath();
 
-    ctx.moveTo(
-      0,
-      y
-    );
+    ctx.moveTo(0, y);
 
     ctx.lineTo(
       canvas.width,
@@ -1131,10 +920,7 @@ function drawBackground() {
   }
 }
 
-
-function drawBlock(
-  block
-) {
+function drawBlock(block) {
   const gradient =
     ctx.createLinearGradient(
       block.x,
@@ -1146,26 +932,25 @@ function drawBlock(
 
   gradient.addColorStop(
     0,
-    "#e8edf2"
+    "#e7edf2"
   );
 
   gradient.addColorStop(
     0.08,
-    "#818c97"
+    "#7c8792"
   );
 
   gradient.addColorStop(
     0.3,
-    "#252c33"
+    "#242b32"
   );
 
   gradient.addColorStop(
     1,
-    "#0f1318"
+    "#0d1217"
   );
 
-  ctx.fillStyle =
-    gradient;
+  ctx.fillStyle = gradient;
 
   ctx.fillRect(
     block.x,
@@ -1175,7 +960,7 @@ function drawBlock(
   );
 
   ctx.fillStyle =
-    "rgba(255,255,255,0.5)";
+    "rgba(255,255,255,0.45)";
 
   ctx.fillRect(
     block.x,
@@ -1185,37 +970,7 @@ function drawBlock(
   );
 }
 
-
-function drawPlatforms() {
-  world.platforms.forEach(
-    drawBlock
-  );
-}
-
-
-function drawFallingPlatforms() {
-  world.fallingPlatforms.forEach(
-    drawBlock
-  );
-}
-
-
-function drawDisappearingBlocks() {
-  world.disappearingBlocks.forEach(
-    block => {
-      if (
-        block.active
-      ) {
-        drawBlock(block);
-      }
-    }
-  );
-}
-
-
-function drawOneSpike(
-  trap
-) {
+function drawSpike(trap) {
   ctx.save();
 
   ctx.shadowColor =
@@ -1224,7 +979,7 @@ function drawOneSpike(
   ctx.shadowBlur = 10;
 
   ctx.fillStyle =
-    "#e5ebf0";
+    "#e7edf2";
 
   ctx.beginPath();
 
@@ -1254,32 +1009,8 @@ function drawOneSpike(
   ctx.restore();
 }
 
-
-function drawSpikes() {
-  world.spikes.forEach(
-    drawOneSpike
-  );
-}
-
-
-function drawHiddenSpikes() {
-  world.hiddenSpikes.forEach(
-    trap => {
-      if (
-        trap.active
-      ) {
-        drawOneSpike(
-          trap
-        );
-      }
-    }
-  );
-}
-
-
 function drawDoor() {
-  const door =
-    world.door;
+  const door = world.door;
 
   ctx.save();
 
@@ -1289,7 +1020,7 @@ function drawDoor() {
   ctx.shadowBlur = 20;
 
   ctx.fillStyle =
-    "#e6edf3";
+    "#e5edf4";
 
   ctx.fillRect(
     door.x,
@@ -1299,7 +1030,7 @@ function drawDoor() {
   );
 
   ctx.fillStyle =
-    "#0c1116";
+    "#0a1015";
 
   ctx.fillRect(
     door.x + 6,
@@ -1328,7 +1059,6 @@ function drawDoor() {
   ctx.restore();
 }
 
-
 function drawPlayer() {
   ctx.save();
 
@@ -1353,11 +1083,10 @@ function drawPlayer() {
 
   gradient.addColorStop(
     1,
-    "#a0acb6"
+    "#9ca8b3"
   );
 
-  ctx.fillStyle =
-    gradient;
+  ctx.fillStyle = gradient;
 
   ctx.fillRect(
     player.x,
@@ -1393,6 +1122,202 @@ function drawPlayer() {
   ctx.restore();
 }
 
+/* =========================
+   BUCLE
+========================= */
 
-function drawPreview() {
-  draw
+function gameLoop() {
+  if (!gameRunning) {
+    return;
+  }
+
+  updateGame();
+
+  drawGame();
+
+  animationId =
+    requestAnimationFrame(
+      gameLoop
+    );
+}
+
+/* =========================
+   BOTÓN PRINCIPAL
+========================= */
+
+startButton.addEventListener(
+  "click",
+  function () {
+    if (
+      gameState === "start"
+    ) {
+      startNewGame();
+      return;
+    }
+
+    if (
+      gameState === "next"
+    ) {
+      continueGame();
+      return;
+    }
+
+    if (
+      gameState === "finished"
+    ) {
+      gameState = "start";
+
+      startButton.textContent =
+        "▶ JUGAR";
+
+      startNewGame();
+    }
+  }
+);
+
+/* =========================
+   CONTROLES TÁCTILES
+========================= */
+
+function configureMoveButton(
+  button,
+  direction
+) {
+  button.addEventListener(
+    "pointerdown",
+    event => {
+      event.preventDefault();
+
+      if (
+        direction === "left"
+      ) {
+        moveLeft = true;
+      }
+
+      if (
+        direction === "right"
+      ) {
+        moveRight = true;
+      }
+    }
+  );
+
+  function stop() {
+    if (
+      direction === "left"
+    ) {
+      moveLeft = false;
+    }
+
+    if (
+      direction === "right"
+    ) {
+      moveRight = false;
+    }
+  }
+
+  button.addEventListener(
+    "pointerup",
+    stop
+  );
+
+  button.addEventListener(
+    "pointerleave",
+    stop
+  );
+
+  button.addEventListener(
+    "pointercancel",
+    stop
+  );
+}
+
+configureMoveButton(
+  leftButton,
+  "left"
+);
+
+configureMoveButton(
+  rightButton,
+  "right"
+);
+
+jumpButton.addEventListener(
+  "pointerdown",
+  event => {
+    event.preventDefault();
+
+    jump();
+  }
+);
+
+/* =========================
+   TECLADO
+========================= */
+
+document.addEventListener(
+  "keydown",
+  event => {
+    const key =
+      event.key.toLowerCase();
+
+    if (
+      key === "a" ||
+      key === "arrowleft"
+    ) {
+      moveLeft = true;
+    }
+
+    if (
+      key === "d" ||
+      key === "arrowright"
+    ) {
+      moveRight = true;
+    }
+
+    if (
+      key === "w" ||
+      key === "arrowup" ||
+      event.code === "Space"
+    ) {
+      event.preventDefault();
+
+      jump();
+    }
+  }
+);
+
+document.addEventListener(
+  "keyup",
+  event => {
+    const key =
+      event.key.toLowerCase();
+
+    if (
+      key === "a" ||
+      key === "arrowleft"
+    ) {
+      moveLeft = false;
+    }
+
+    if (
+      key === "d" ||
+      key === "arrowright"
+    ) {
+      moveRight = false;
+    }
+  }
+);
+
+/* =========================
+   INICIO
+========================= */
+
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
+
+resizeCanvas();
+
+drawBackground();
