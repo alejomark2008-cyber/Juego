@@ -12,36 +12,67 @@ const leftButton = document.getElementById("left-button");
 const rightButton = document.getElementById("right-button");
 const jumpButton = document.getElementById("jump-button");
 
-let gameRunning = false;
-let animationId;
-
-let player = {
-  x: 90,
-  y: 500,
-  width: 38,
-  height: 52,
-  speed: 6,
-  velocityY: 0,
-  onGround: true
-};
-
-let keys = {
-  left: false,
-  right: false
-};
-
-const gravity = 0.7;
-const groundY = 552;
+let running = false;
+let animation;
 
 let level = 1;
 let retries = 0;
 
-const obstacles = [
-  { x: 310, width: 45, height: 75 },
-  { x: 510, width: 55, height: 110 },
-  { x: 730, width: 40, height: 90 },
-  { x: 930, width: 65, height: 130 }
-];
+let left = false;
+let right = false;
+
+let player = {
+  x: 35,
+  y: 0,
+  width: 28,
+  height: 40,
+  speed: 4,
+  velocityY: 0,
+  jumping: false
+};
+
+let obstacles = [];
+
+function resizeCanvas() {
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+
+  canvas.width = width;
+  canvas.height = height;
+
+  createLevel();
+}
+
+function createLevel() {
+  const ground = canvas.height - 95;
+
+  player.x = 35;
+  player.y = ground - player.height;
+  player.velocityY = 0;
+  player.jumping = false;
+
+  obstacles = [];
+
+  const positions = [
+    0.30,
+    0.55,
+    0.78
+  ];
+
+  positions.forEach((position, index) => {
+    obstacles.push({
+      x: canvas.width * position,
+      width: 32,
+      height: 55 + index * 12
+    });
+  });
+
+  progressFill.style.width = "0%";
+}
+
+function groundY() {
+  return canvas.height - 95;
+}
 
 function drawBackground() {
   const gradient = ctx.createLinearGradient(
@@ -73,19 +104,14 @@ function drawBackground() {
   ctx.strokeStyle =
     "rgba(255,255,255,0.05)";
 
-  ctx.lineWidth = 1;
-
   for (
     let x = 0;
     x < canvas.width;
-    x += 60
+    x += 45
   ) {
     ctx.beginPath();
 
-    ctx.moveTo(
-      x,
-      0
-    );
+    ctx.moveTo(x, 0);
 
     ctx.lineTo(
       x,
@@ -98,14 +124,11 @@ function drawBackground() {
   for (
     let y = 0;
     y < canvas.height;
-    y += 60
+    y += 45
   ) {
     ctx.beginPath();
 
-    ctx.moveTo(
-      0,
-      y
-    );
+    ctx.moveTo(0, y);
 
     ctx.lineTo(
       canvas.width,
@@ -117,45 +140,24 @@ function drawBackground() {
 }
 
 function drawGround() {
-  const groundGradient =
-    ctx.createLinearGradient(
-      0,
-      groundY,
-      0,
-      canvas.height
-    );
-
-  groundGradient.addColorStop(
-    0,
-    "#5f6b76"
-  );
-
-  groundGradient.addColorStop(
-    0.08,
-    "#20262c"
-  );
-
-  groundGradient.addColorStop(
-    1,
-    "#050607"
-  );
+  const y = groundY();
 
   ctx.fillStyle =
-    groundGradient;
+    "#151a20";
 
   ctx.fillRect(
     0,
-    groundY,
+    y,
     canvas.width,
-    canvas.height - groundY
+    canvas.height - y
   );
 
   ctx.fillStyle =
-    "rgba(255,255,255,0.5)";
+    "#d8e0e8";
 
   ctx.fillRect(
     0,
-    groundY,
+    y,
     canvas.width,
     3
   );
@@ -165,11 +167,11 @@ function drawPlayer() {
   ctx.save();
 
   ctx.shadowColor =
-    "rgba(255,255,255,0.9)";
+    "white";
 
-  ctx.shadowBlur = 22;
+  ctx.shadowBlur = 20;
 
-  const playerGradient =
+  const gradient =
     ctx.createLinearGradient(
       player.x,
       player.y,
@@ -177,18 +179,17 @@ function drawPlayer() {
       player.y + player.height
     );
 
-  playerGradient.addColorStop(
+  gradient.addColorStop(
     0,
     "#ffffff"
   );
 
-  playerGradient.addColorStop(
+  gradient.addColorStop(
     1,
-    "#9aa5b0"
+    "#aab4be"
   );
 
-  ctx.fillStyle =
-    playerGradient;
+  ctx.fillStyle = gradient;
 
   ctx.fillRect(
     player.x,
@@ -198,135 +199,102 @@ function drawPlayer() {
   );
 
   ctx.fillStyle =
-    "#11161b";
+    "#111820";
 
   ctx.fillRect(
-    player.x + 8,
-    player.y + 12,
-    7,
-    7
+    player.x + 6,
+    player.y + 10,
+    5,
+    5
   );
 
   ctx.fillRect(
-    player.x + 23,
-    player.y + 12,
-    7,
-    7
+    player.x + 17,
+    player.y + 10,
+    5,
+    5
   );
 
   ctx.restore();
 }
 
-function drawObstacle(
-  obstacle
-) {
-  const y =
-    groundY -
-    obstacle.height;
+function drawObstacles() {
+  const ground = groundY();
 
-  ctx.save();
+  obstacles.forEach(
+    obstacle => {
 
-  ctx.shadowColor =
-    "rgba(210,220,230,0.5)";
+      const y =
+        ground -
+        obstacle.height;
 
-  ctx.shadowBlur = 14;
+      const gradient =
+        ctx.createLinearGradient(
+          obstacle.x,
+          y,
+          obstacle.x,
+          ground
+        );
 
-  const obstacleGradient =
-    ctx.createLinearGradient(
-      obstacle.x,
-      y,
-      obstacle.x,
-      groundY
-    );
+      gradient.addColorStop(
+        0,
+        "#f1f4f7"
+      );
 
-  obstacleGradient.addColorStop(
-    0,
-    "#d9e1e8"
-  );
+      gradient.addColorStop(
+        0.3,
+        "#747f8a"
+      );
 
-  obstacleGradient.addColorStop(
-    0.2,
-    "#68737e"
-  );
+      gradient.addColorStop(
+        1,
+        "#171c21"
+      );
 
-  obstacleGradient.addColorStop(
-    1,
-    "#171c21"
-  );
+      ctx.fillStyle =
+        gradient;
 
-  ctx.fillStyle =
-    obstacleGradient;
+      ctx.fillRect(
+        obstacle.x,
+        y,
+        obstacle.width,
+        obstacle.height
+      );
 
-  ctx.fillRect(
-    obstacle.x,
-    y,
-    obstacle.width,
-    obstacle.height
-  );
-
-  ctx.restore();
-}
-
-function drawFinish() {
-  const finishX =
-    canvas.width - 95;
-
-  ctx.fillStyle =
-    "rgba(255,255,255,0.2)";
-
-  ctx.fillRect(
-    finishX,
-    130,
-    7,
-    groundY - 130
-  );
-
-  ctx.fillStyle =
-    "#ffffff";
-
-  ctx.font =
-    "bold 22px Arial";
-
-  ctx.fillText(
-    "FIN",
-    finishX - 18,
-    115
+    }
   );
 }
 
 function updatePlayer() {
-  if (
-    keys.left
-  ) {
+  if (left) {
     player.x -=
       player.speed;
   }
 
-  if (
-    keys.right
-  ) {
+  if (right) {
     player.x +=
       player.speed;
   }
 
-  player.velocityY +=
-    gravity;
+  player.velocityY += 0.65;
 
   player.y +=
     player.velocityY;
 
+  const ground = groundY();
+
   if (
     player.y +
     player.height >=
-    groundY
+    ground
   ) {
     player.y =
-      groundY -
+      ground -
       player.height;
 
     player.velocityY = 0;
 
-    player.onGround = true;
+    player.jumping = false;
   }
 
   if (
@@ -348,19 +316,19 @@ function updatePlayer() {
 
 function jump() {
   if (
-    player.onGround
+    !player.jumping
   ) {
-    player.velocityY = -15;
+    player.velocityY = -12;
 
-    player.onGround = false;
+    player.jumping = true;
   }
 }
 
-function isColliding(
+function collision(
   obstacle
 ) {
   const obstacleY =
-    groundY -
+    groundY() -
     obstacle.height;
 
   return (
@@ -382,44 +350,44 @@ function isColliding(
   );
 }
 
-function restartLevel() {
+function restart() {
   retries++;
 
   deathCount.textContent =
     retries;
 
-  player.x = 90;
+  player.x = 35;
 
   player.y =
-    groundY -
+    groundY() -
     player.height;
 
   player.velocityY = 0;
 
-  player.onGround = true;
+  player.jumping = false;
 }
 
 function updateProgress() {
-  const progress =
-    Math.max(
-      0,
-      Math.min(
-        100,
+  const finish =
+    canvas.width - 45;
+
+  const percentage =
+    Math.min(
+      100,
+      Math.max(
+        0,
         (
           player.x /
-          (
-            canvas.width -
-            player.width
-          )
+          finish
         ) * 100
       )
     );
 
   progressFill.style.width =
-    progress + "%";
+    percentage + "%";
 }
 
-function nextLevel() {
+function finishLevel() {
   if (
     level < 5
   ) {
@@ -428,39 +396,21 @@ function nextLevel() {
     levelNumber.textContent =
       level;
 
-    player.x = 90;
-
-    player.y =
-      groundY -
-      player.height;
-
-    player.velocityY = 0;
-
-    progressFill.style.width =
-      "0%";
+    createLevel();
   } else {
-    gameRunning = false;
-
-    cancelAnimationFrame(
-      animationId
-    );
+    running = false;
 
     startScreen.classList.remove(
       "hidden"
     );
 
-    startButton.innerHTML =
-      "✓ JUEGO COMPLETADO";
-
-    startButton.disabled =
-      false;
+    startButton.textContent =
+      "✓ COMPLETASTE EL JUEGO";
   }
 }
 
-function gameLoop() {
-  if (
-    !gameRunning
-  ) {
+function loop() {
+  if (!running) {
     return;
   }
 
@@ -468,46 +418,43 @@ function gameLoop() {
 
   drawGround();
 
-  drawFinish();
-
   updatePlayer();
 
-  for (
-    const obstacle
-    of obstacles
-  ) {
-    drawObstacle(
-      obstacle
-    );
-
-    if (
-      isColliding(
-        obstacle
-      )
-    ) {
-      restartLevel();
-    }
-  }
+  drawObstacles();
 
   drawPlayer();
+
+  obstacles.forEach(
+    obstacle => {
+
+      if (
+        collision(
+          obstacle
+        )
+      ) {
+        restart();
+      }
+
+    }
+  );
 
   updateProgress();
 
   if (
     player.x >
-    canvas.width - 130
+    canvas.width - 55
   ) {
-    nextLevel();
+    finishLevel();
   }
 
-  animationId =
+  animation =
     requestAnimationFrame(
-      gameLoop
+      loop
     );
 }
 
 function startGame() {
-  gameRunning = true;
+  running = true;
 
   level = 1;
 
@@ -519,31 +466,17 @@ function startGame() {
   deathCount.textContent =
     "0";
 
-  progressFill.style.width =
-    "0%";
-
-  player.x = 90;
-
-  player.y =
-    groundY -
-    player.height;
-
-  player.velocityY = 0;
-
-  player.onGround = true;
-
   startScreen.classList.add(
     "hidden"
   );
 
-  startButton.innerHTML =
-    "▶ JUGAR";
+  createLevel();
 
   cancelAnimationFrame(
-    animationId
+    animation
   );
 
-  gameLoop();
+  loop();
 }
 
 startButton.addEventListener(
@@ -551,9 +484,73 @@ startButton.addEventListener(
   startGame
 );
 
+function setLeft(
+  value
+) {
+  left = value;
+}
+
+function setRight(
+  value
+) {
+  right = value;
+}
+
+function stopMovement() {
+  left = false;
+  right = false;
+}
+
+leftButton.addEventListener(
+  "pointerdown",
+  event => {
+    event.preventDefault();
+
+    setLeft(true);
+  }
+);
+
+leftButton.addEventListener(
+  "pointerup",
+  stopMovement
+);
+
+leftButton.addEventListener(
+  "pointerleave",
+  stopMovement
+);
+
+rightButton.addEventListener(
+  "pointerdown",
+  event => {
+    event.preventDefault();
+
+    setRight(true);
+  }
+);
+
+rightButton.addEventListener(
+  "pointerup",
+  stopMovement
+);
+
+rightButton.addEventListener(
+  "pointerleave",
+  stopMovement
+);
+
+jumpButton.addEventListener(
+  "pointerdown",
+  event => {
+    event.preventDefault();
+
+    jump();
+  }
+);
+
 document.addEventListener(
   "keydown",
-  function(event) {
+  event => {
 
     const key =
       event.key.toLowerCase();
@@ -562,20 +559,20 @@ document.addEventListener(
       key === "a" ||
       key === "arrowleft"
     ) {
-      keys.left = true;
+      left = true;
     }
 
     if (
       key === "d" ||
       key === "arrowright"
     ) {
-      keys.right = true;
+      right = true;
     }
 
     if (
-      event.code === "Space" ||
       key === "w" ||
-      key === "arrowup"
+      key === "arrowup" ||
+      event.code === "Space"
     ) {
       event.preventDefault();
 
@@ -587,7 +584,7 @@ document.addEventListener(
 
 document.addEventListener(
   "keyup",
-  function(event) {
+  event => {
 
     const key =
       event.key.toLowerCase();
@@ -596,89 +593,22 @@ document.addEventListener(
       key === "a" ||
       key === "arrowleft"
     ) {
-      keys.left = false;
+      left = false;
     }
 
     if (
       key === "d" ||
       key === "arrowright"
     ) {
-      keys.right = false;
+      right = false;
     }
 
   }
 );
 
-function holdButton(
-  button,
-  action
-) {
-
-  button.addEventListener(
-    "pointerdown",
-    function(event) {
-
-      event.preventDefault();
-
-      action(true);
-
-    }
-  );
-
-  button.addEventListener(
-    "pointerup",
-    function() {
-
-      action(false);
-
-    }
-  );
-
-  button.addEventListener(
-    "pointerleave",
-    function() {
-
-      action(false);
-
-    }
-  );
-
-  button.addEventListener(
-    "pointercancel",
-    function() {
-
-      action(false);
-
-    }
-  );
-
-}
-
-holdButton(
-  leftButton,
-  function(value) {
-
-    keys.left = value;
-
-  }
+window.addEventListener(
+  "resize",
+  resizeCanvas
 );
 
-holdButton(
-  rightButton,
-  function(value) {
-
-    keys.right = value;
-
-  }
-);
-
-jumpButton.addEventListener(
-  "pointerdown",
-  function(event) {
-
-    event.preventDefault();
-
-    jump();
-
-  }
-);
+resizeCanvas();
