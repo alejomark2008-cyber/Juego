@@ -1,237 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
   <meta charset="UTF-8">
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0"
   >
 
-  <title>CHAIN RUSH</title>
+  <title>CHAIN RUN</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
 
 <body>
 
-  <div class="background-effects"></div>
-
-  <main class="game-page">
+  <main class="game-app">
 
     <header class="top-bar">
 
-      <div class="game-logo">
-
-        <span class="logo-chain">⛓</span>
-
-        <div>
-
-          <h1>CHAIN RUSH</h1>
-
-          <p>NO TE DETENGAS</p>
-
-        </div>
-
+      <div class="game-title">
+        CHAIN RUN
       </div>
 
-      <div class="level-display">
+      <div class="game-info">
 
-        <span>NIVEL</span>
+        <div class="info-box">
+          NIVEL:
+          <span id="level-number">
+            1
+          </span>
+        </div>
 
-        <strong id="level-number">1</strong>
+        <div class="info-box">
+          MUERTES:
+          <span id="death-count">
+            0
+          </span>
+        </div>
 
       </div>
 
     </header>
 
+    <section class="progress-area">
 
-    <section class="game-frame">
+      <div class="progress-track">
 
-      <canvas
-        id="gameCanvas"
-        width="1200"
-        height="650"
-      ></canvas>
-
-
-      <div
-        id="start-screen"
-        class="game-overlay"
-      >
-
-        <div class="start-card">
-
-          <div class="small-title">
-            PROTOTIPO · VERSIÓN 1
-          </div>
-
-          <h2>
-            SUPERA EL<br>
-            RECORRIDO
-          </h2>
-
-          <p>
-            Esquiva las trampas, salta los obstáculos
-            y llega al final de los cinco niveles.
-          </p>
-
-          <button id="start-button">
-
-            <span>▶</span>
-
-            JUGAR
-
-          </button>
-
-
-          <div class="controls">
-
-            <div class="control-item">
-
-              <div>
-
-                <span class="key">A</span>
-
-                <span class="key">D</span>
-
-              </div>
-
-              <p>MOVERSE</p>
-
-            </div>
-
-
-            <div class="control-item">
-
-              <div>
-
-                <span class="key wide">
-                  ESPACIO
-                </span>
-
-              </div>
-
-              <p>SALTAR</p>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <div
-        id="game-message"
-        class="game-message"
-      >
-
-        <span id="message-title">
-          NIVEL 1
-        </span>
-
-        <small id="message-text">
-          PREPÁRATE
-        </small>
-
-      </div>
-
-
-      <div class="mobile-controls">
-
-        <button
-          id="left-button"
-          class="mobile-button"
-          aria-label="Mover a la izquierda"
-        >
-          ◀
-        </button>
-
-
-        <button
-          id="right-button"
-          class="mobile-button"
-          aria-label="Mover a la derecha"
-        >
-          ▶
-        </button>
-
-
-        <button
-          id="jump-button"
-          class="mobile-button jump"
-          aria-label="Saltar"
-        >
-          ▲
-        </button>
+        <div
+          id="progress-fill"
+          class="progress-fill"
+        ></div>
 
       </div>
 
     </section>
 
+    <section class="game-area">
 
-    <footer class="bottom-bar">
+      <canvas
+        id="gameCanvas"
+      ></canvas>
 
-      <div class="status">
+      <div
+        id="start-screen"
+        class="start-screen"
+      >
 
-        <span class="status-dot"></span>
+        <div class="start-card">
 
-        <span>SISTEMA ACTIVO</span>
+          <h1>
+            CHAIN RUN
+          </h1>
 
-      </div>
+          <p id="message-text">
+            Supera los obstáculos
+            y llega a la puerta.
+          </p>
 
-
-      <div class="progress-area">
-
-        <span id="progress-text">
-          PROGRESO DEL NIVEL
-        </span>
-
-        <div class="progress-bar">
-
-          <div
-            id="progress-fill"
-            class="progress-fill"
-          ></div>
+          <button
+            id="start-button"
+            type="button"
+          >
+            ▶ JUGAR
+          </button>
 
         </div>
 
       </div>
 
+    </section>
 
-      <div class="deaths">
+    <section class="controls">
 
-        REINTENTOS:
+      <div class="movement-controls">
 
-        <strong id="death-count">
-          0
-        </strong>
+        <button
+          id="left-button"
+          type="button"
+          aria-label="Mover a la izquierda"
+        >
+          ◀
+        </button>
+
+        <button
+          id="right-button"
+          type="button"
+          aria-label="Mover a la derecha"
+        >
+          ▶
+        </button>
 
       </div>
 
-    </footer>
+      <button
+        id="jump-button"
+        type="button"
+        aria-label="Saltar"
+      >
+        SALTAR
+      </button>
 
+    </section>
 
-    <div class="creditos">
+    <footer>
+
+      Diseñado por Alejandro Romero
 
       <span>
-        PROTOTIPO · VERSIÓN 1
+        · Prototipo
       </span>
 
-      <strong>
-        DISEÑADO POR ALEJANDRO ROMERO
-      </strong>
-
-    </div>
+    </footer>
 
   </main>
-
 
   <script src="game.js"></script>
 
 </body>
-
 </html>
