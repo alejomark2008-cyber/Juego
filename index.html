@@ -219,3 +219,60 @@
 
 </body>
 </html>
+/* CORRECCIÓN PARA CELULARES */
+
+@media (max-width: 700px) {
+
+  .game-page {
+    justify-content: flex-start;
+  }
+
+  .game-frame {
+    height: 540px;
+  }
+
+  #gameCanvas {
+    width: 100%;
+    height: 540px;
+    object-fit: cover;
+  }
+
+  .game-overlay {
+    overflow-y: auto;
+    align-items: flex-start;
+    padding: 18px 12px;
+  }
+
+  .start-card {
+    margin: 0 auto;
+    padding: 20px 16px;
+    transform: scale(0.88);
+    transform-origin: top center;
+  }
+
+  .small-title {
+    font-size: 8px;
+    letter-spacing: 3px;
+  }
+
+  .start-card h2 {
+    margin: 10px 0;
+    font-size: 36px;
+  }
+
+  .start-card > p {
+    margin-bottom: 15px;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  #start-button {
+    padding: 13px 32px;
+    font-size: 13px;
+  }
+
+  .controls {
+    margin-top: 15px;
+  }
+
+}
