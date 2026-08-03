@@ -1,287 +1,246 @@
-const canvas = document.getElementById("gameCanvas");
-const ctx = canvas.getContext("2d");
-
-const startButton = document.getElementById("start-button");
-const startScreen = document.getElementById("start-screen");
-
-const leftButton = document.getElementById("left-button");
-const rightButton = document.getElementById("right-button");
-const jumpButton = document.getElementById("jump-button");
-
-let playing = false;
-let left = false;
-let right = false;
-let animationStarted = false;
-
-let groundY = 0;
-
-const player = {
-  x: 60,
-  y: 0,
-  width: 30,
-  height: 40,
-  speed: 5,
-  velocityY: 0,
-  gravity: 0.7,
-  jumpForce: -13,
-  onGround: true
-};
-
-function resizeCanvas() {
-  canvas.width = canvas.clientWidth;
-  canvas.height = canvas.clientHeight;
-
-  groundY = canvas.height - 85;
-
-  if (!playing) {
-    player.x = 60;
-    player.y = groundY - player.height;
-
-    draw();
-  }
-}
-
-function startGame() {
-  playing = true;
-
-  startScreen.style.display = "none";
-
-  player.x = 60;
-  player.y = groundY - player.height;
-  player.velocityY = 0;
-  player.onGround = true;
-
-  if (!animationStarted) {
-    animationStarted = true;
-    requestAnimationFrame(gameLoop);
-  }
-}
-
-function update() {
-  if (left) {
-    player.x -= player.speed;
-  }
-
-  if (right) {
-    player.x += player.speed;
-  }
-
-  if (player.x < 0) {
-    player.x = 0;
-  }
-
-  if (player.x + player.width > canvas.width) {
-    player.x = canvas.width - player.width;
-  }
-
-  player.velocityY += player.gravity;
-  player.y += player.velocityY;
-
-  if (player.y + player.height >= groundY) {
-    player.y = groundY - player.height;
-    player.velocityY = 0;
-    player.onGround = true;
-  }
-}
-
-function jump() {
-  if (playing && player.onGround) {
-    player.velocityY = player.jumpForce;
-    player.onGround = false;
-  }
-}
-
-function draw() {
-  const background = ctx.createLinearGradient(
-    0,
-    0,
-    0,
-    canvas.height
-  );
-
-  background.addColorStop(0, "#27323c");
-  background.addColorStop(1, "#020304");
-
-  ctx.fillStyle = background;
-
-  ctx.fillRect(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
-
-  ctx.strokeStyle = "rgba(255,255,255,0.05)";
-
-  for (let x = 0; x < canvas.width; x += 45) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = "#252d34";
-
-  ctx.fillRect(
-    0,
-    groundY,
-    canvas.width,
-    canvas.height - groundY
-  );
-
-  ctx.fillStyle = "#e8eef2";
-
-  ctx.fillRect(
-    0,
-    groundY,
-    canvas.width,
-    5
-  );
-
-  const doorX = canvas.width - 75;
-
-  ctx.fillStyle = "#dce5ea";
-
-  ctx.fillRect(
-    doorX,
-    groundY - 65,
-    42,
-    65
-  );
-
-  ctx.fillStyle = "#071018";
-
-  ctx.fillRect(
-    doorX + 6,
-    groundY - 58,
-    30,
-    58
-  );
-
-  ctx.shadowColor = "white";
-  ctx.shadowBlur = 15;
-
-  ctx.fillStyle = "white";
-
-  ctx.fillRect(
-    player.x,
-    player.y,
-    player.width,
-    player.height
-  );
-
-  ctx.shadowBlur = 0;
-
-  ctx.fillStyle = "#111";
-
-  ctx.fillRect(
-    player.x + 6,
-    player.y + 10,
-    4,
-    4
-  );
-
-  ctx.fillRect(
-    player.x + 20,
-    player.y + 10,
-    4,
-    4
-  );
-}
-
-function gameLoop() {
-  if (playing) {
-    update();
-    draw();
-  }
-
-  requestAnimationFrame(gameLoop);
-}
-
-/* BOTÓN JUGAR */
-
-startButton.onclick = function () {
-  startGame();
-};
-
-/* BOTÓN IZQUIERDA */
-
-leftButton.onpointerdown = function () {
-  left = true;
-};
-
-leftButton.onpointerup = function () {
-  left = false;
-};
-
-leftButton.onpointercancel = function () {
-  left = false;
-};
-
-/* BOTÓN DERECHA */
-
-rightButton.onpointerdown = function () {
-  right = true;
-};
-
-rightButton.onpointerup = function () {
-  right = false;
-};
-
-rightButton.onpointercancel = function () {
-  right = false;
-};
-
-/* BOTÓN SALTAR */
-
-jumpButton.onclick = function () {
-  jump();
-};
-
-/* TECLADO */
-
-document.onkeydown = function (event) {
-  if (
-    event.key === "ArrowLeft" ||
-    event.key.toLowerCase() === "a"
-  ) {
-    left = true;
-  }
-
-  if (
-    event.key === "ArrowRight" ||
-    event.key.toLowerCase() === "d"
-  ) {
-    right = true;
-  }
-
-  if (
-    event.key === "ArrowUp" ||
-    event.key === " "
-  ) {
-    jump();
-  }
-};
-
-document.onkeyup = function (event) {
-  if (
-    event.key === "ArrowLeft" ||
-    event.key.toLowerCase() === "a"
-  ) {
-    left = false;
-  }
-
-  if (
-    event.key === "ArrowRight" ||
-    event.key.toLowerCase() === "d"
-  ) {
-    right = false;
-  }
-};
-
-window.addEventListener(
-  "resize",
-  resizeCanvas
-);
-
-resizeCanvas();
+const categoryScreen = document.getElementById("category-screen");
+const quizScreen = document.getElementById("quiz-screen");
+const resultScreen = document.getElementById("result-screen");
+
+const categoryButtons = document.querySelectorAll(".category-button");
+
+const scoreElement = document.getElementById("score");
+const categoryName = document.getElementById("category-name");
+const questionNumber = document.getElementById("question-number");
+const progressBar = document.getElementById("progress-bar");
+const questionText = document.getElementById("question-text");
+const answersElement = document.getElementById("answers");
+const feedback = document.getElementById("feedback");
+
+const finalScore = document.getElementById("final-score");
+const resultMessage = document.getElementById("result-message");
+const playAgainButton = document.getElementById("play-again-button");
+
+
+const categories = {
+
+  videojuegos: {
+    name: "VIDEOJUEGOS",
+
+    questions: [
+
+      {
+        question: "¿Cuál es el personaje principal de Minecraft?",
+        answers: [
+          "Steve",
+          "Mario",
+          "Sonic",
+          "Link"
+        ],
+        correct: 0
+      },
+
+      {
+        question: "¿Qué juego tiene un mapa llamado Battle Royale?",
+        answers: [
+          "Minecraft",
+          "Fortnite",
+          "Among Us",
+          "Roblox"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué empresa creó la consola PlayStation?",
+        answers: [
+          "Nintendo",
+          "Microsoft",
+          "Sony",
+          "Sega"
+        ],
+        correct: 2
+      },
+
+      {
+        question: "¿En qué juego aparece Mario?",
+        answers: [
+          "Super Mario Bros.",
+          "Minecraft",
+          "Free Fire",
+          "FIFA"
+        ],
+        correct: 0
+      },
+
+      {
+        question: "¿Qué juego permite construir con bloques?",
+        answers: [
+          "Minecraft",
+          "Pac-Man",
+          "Tetris",
+          "Sonic"
+        ],
+        correct: 0
+      },
+
+      {
+        question: "¿Cuál es el nombre del erizo azul?",
+        answers: [
+          "Crash",
+          "Sonic",
+          "Tails",
+          "Knuckles"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué empresa creó Xbox?",
+        answers: [
+          "Apple",
+          "Microsoft",
+          "Sony",
+          "Nintendo"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué juego tiene personajes llamados creepers?",
+        answers: [
+          "Roblox",
+          "Fortnite",
+          "Minecraft",
+          "Terraria"
+        ],
+        correct: 2
+      },
+
+      {
+        question: "¿Cuál es el objetivo principal de un juego de carreras?",
+        answers: [
+          "Construir una casa",
+          "Llegar primero a la meta",
+          "Resolver preguntas",
+          "Encontrar letras"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué videojuego tiene un personaje llamado Pikachu?",
+        answers: [
+          "Pokémon",
+          "Sonic",
+          "Mario Kart",
+          "Minecraft"
+        ],
+        correct: 0
+      }
+
+    ]
+  },
+
+
+  futbol: {
+    name: "FÚTBOL",
+
+    questions: [
+
+      {
+        question: "¿Cuántos jugadores tiene un equipo en el campo?",
+        answers: [
+          "9",
+          "10",
+          "11",
+          "12"
+        ],
+        correct: 2
+      },
+
+      {
+        question: "¿Cuánto dura normalmente un partido de fútbol?",
+        answers: [
+          "60 minutos",
+          "80 minutos",
+          "90 minutos",
+          "100 minutos"
+        ],
+        correct: 2
+      },
+
+      {
+        question: "¿Qué país ganó el Mundial de 2022?",
+        answers: [
+          "Francia",
+          "Argentina",
+          "Brasil",
+          "España"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Cómo se llama la máxima competición de selecciones?",
+        answers: [
+          "Champions League",
+          "Copa Mundial",
+          "Copa Libertadores",
+          "Premier League"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Cuántos puntos vale una victoria normalmente?",
+        answers: [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        correct: 2
+      },
+
+      {
+        question: "¿Qué jugador es conocido como CR7?",
+        answers: [
+          "Lionel Messi",
+          "Cristiano Ronaldo",
+          "Neymar",
+          "Kylian Mbappé"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué tarjeta expulsa a un jugador?",
+        answers: [
+          "Azul",
+          "Verde",
+          "Amarilla",
+          "Roja"
+        ],
+        correct: 3
+      },
+
+      {
+        question: "¿Cómo se llama el jugador que protege la portería?",
+        answers: [
+          "Delantero",
+          "Arquero",
+          "Defensa",
+          "Mediocampista"
+        ],
+        correct: 1
+      },
+
+      {
+        question: "¿Qué país es conocido por la selección Canarinha?",
+        answers: [
+          "Brasil",
+          "Colombia",
+          "Portugal",
+          "Italia"
+        ],
+        correct: 0
+      },
+
+      {
+        question: "
