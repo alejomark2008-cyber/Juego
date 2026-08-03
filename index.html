@@ -8,7 +8,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>CHAIN RUN</title>
+  <title>NEON QUIZ</title>
 
   <link
     rel="stylesheet"
@@ -18,127 +18,32 @@
 
 <body>
 
-  <main class="game-app">
+  <main class="app">
 
-    <header class="top-bar">
+    <!-- ENCABEZADO -->
 
-      <div class="game-title">
-        CHAIN RUN
+    <header class="header">
+
+      <div>
+        <h1>NEON QUIZ</h1>
+
+        <p>
+          Demuestra cuánto sabes
+        </p>
       </div>
 
-      <div class="game-info">
-
-        <div class="info-box">
-          NIVEL:
-          <span id="level-number">
-            1
-          </span>
-        </div>
-
-        <div class="info-box">
-          MUERTES:
-          <span id="death-count">
-            0
-          </span>
-        </div>
-
+      <div class="score-box">
+        PUNTOS:
+        <span id="score">
+          0
+        </span>
       </div>
 
     </header>
 
-    <section class="progress-area">
 
-      <div class="progress-track">
+    <!-- PANTALLA PARA ELEGIR TEMÁTICA -->
 
-        <div
-          id="progress-fill"
-          class="progress-fill"
-        ></div>
-
-      </div>
-
-    </section>
-
-    <section class="game-area">
-
-      <canvas
-        id="gameCanvas"
-      ></canvas>
-
-      <div
-        id="start-screen"
-        class="start-screen"
-      >
-
-        <div class="start-card">
-
-          <h1>
-            CHAIN RUN
-          </h1>
-
-          <p id="message-text">
-            Supera los obstáculos
-            y llega a la puerta.
-          </p>
-
-          <button
-            id="start-button"
-            type="button"
-          >
-            ▶ JUGAR
-          </button>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="controls">
-
-      <div class="movement-controls">
-
-        <button
-          id="left-button"
-          type="button"
-          aria-label="Mover a la izquierda"
-        >
-          ◀
-        </button>
-
-        <button
-          id="right-button"
-          type="button"
-          aria-label="Mover a la derecha"
-        >
-          ▶
-        </button>
-
-      </div>
-
-      <button
-        id="jump-button"
-        type="button"
-        aria-label="Saltar"
-      >
-        SALTAR
-      </button>
-
-    </section>
-
-    <footer>
-
-      Diseñado por Alejandro Romero
-
-      <span>
-        · Prototipo
-      </span>
-
-    </footer>
-
-  </main>
-
-  <script src="game.js"></script>
-
-</body>
-</html>
+    <section
+      id="category-screen"
+      class="screen          
