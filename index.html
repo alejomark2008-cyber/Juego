@@ -2,14 +2,160 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chain Rush</title>
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>CHAIN RUSH</title>
+
+  <!-- Archivo de estilos -->
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <main id="game-container">
-    <div id="game"></div>
+
+  <!-- Fondo futurista -->
+  <div class="background-effects"></div>
+
+  <!-- Pantalla principal -->
+  <main class="game-page">
+
+    <!-- Encabezado -->
+    <header class="top-bar">
+
+      <div class="game-logo">
+        <span class="logo-chain">⛓</span>
+
+        <div>
+          <h1>CHAIN RUSH</h1>
+          <p>NO TE DETENGAS</p>
+        </div>
+      </div>
+
+      <div class="level-display">
+        <span>NIVEL</span>
+        <strong id="level-number">1</strong>
+      </div>
+
+    </header>
+
+
+    <!-- Zona donde aparecerá el juego -->
+    <section class="game-frame">
+
+      <canvas
+        id="gameCanvas"
+        width="1200"
+        height="650"
+      ></canvas>
+
+      <!-- Pantalla de inicio -->
+      <div id="start-screen" class="game-overlay">
+
+        <div class="start-card">
+
+          <div class="small-title">
+            PROTOTIPO · VERSIÓN 1
+          </div>
+
+          <h2>SUPERA EL<br>RECORRIDO</h2>
+
+          <p>
+            Esquiva las trampas, salta los obstáculos
+            y llega al final de los cinco niveles.
+          </p>
+
+          <button id="start-button">
+            <span>▶</span>
+            JUGAR
+          </button>
+
+          <div class="controls">
+
+            <div class="control-item">
+              <span class="key">A</span>
+              <span class="key">D</span>
+              <p>MOVERSE</p>
+            </div>
+
+            <div class="control-item">
+              <span class="key wide">ESPACIO</span>
+              <p>SALTAR</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Mensaje durante el juego -->
+      <div id="game-message" class="game-message">
+        <span id="message-title">NIVEL 1</span>
+        <small id="message-text">
+          PREPÁRATE
+        </small>
+      </div>
+
+
+      <!-- Controles para celular -->
+      <div class="mobile-controls">
+
+        <button id="left-button" class="mobile-button">
+          ◀
+        </button>
+
+        <button id="right-button" class="mobile-button">
+          ▶
+        </button>
+
+        <button id="jump-button" class="mobile-button jump">
+          ▲
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- Barra inferior -->
+    <footer class="bottom-bar">
+
+      <div class="status">
+        <span class="status-dot"></span>
+        SISTEMA ACTIVO
+      </div>
+
+      <div class="progress-area">
+
+        <span id="progress-text">
+          PROGRESO DEL NIVEL
+        </span>
+
+        <div class="progress-bar">
+          <div
+            id="progress-fill"
+            class="progress-fill"
+          ></div>
+        </div>
+
+      </div>
+
+      <div class="deaths">
+        REINTENTOS:
+        <strong id="death-count">0</strong>
+      </div>
+
+    </footer>
+
   </main>
+
+
+  <!-- Archivo principal del juego -->
   <script src="game.js"></script>
+
 </body>
 </html>
