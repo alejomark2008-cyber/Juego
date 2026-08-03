@@ -8,262 +8,280 @@ const leftButton = document.getElementById("left-button");
 const rightButton = document.getElementById("right-button");
 const jumpButton = document.getElementById("jump-button");
 
-let gameStarted = false;
-
-let moveLeft = false;
-let moveRight = false;
-
-let playerX = 60;
-let playerY = 0;
-
-let playerSpeed = 5;
-
-let velocityY = 0;
-
-let gravity = 0.7;
-
-let jumping = false;
+let playing = false;
+let left = false;
+let right = false;
+let animationStarted = false;
 
 let groundY = 0;
 
-/* AJUSTAR EL CANVAS */
-
-function setupGame() {
-
-  canvas.width =
-    canvas.offsetWidth;
-
-  canvas.height =
-    canvas.offsetHeight;
-
-  groundY =
-    canvas.height - 85;
-
-  playerY =
-    groundY - 40;
-
-  drawGame();
-}
-
-/* INICIAR EL JUEGO */
-
-startButton.onclick = function () {
-
-  gameStarted = true;
-
-  startScreen.style.display =
-    "none";
-
-  playerX = 60;
-
-  playerY =
-    groundY - 40;
-
-  velocityY = 0;
-
-  jumping = false;
-
-  gameLoop();
+const player = {
+  x: 60,
+  y: 0,
+  width: 30,
+  height: 40,
+  speed: 5,
+  velocityY: 0,
+  gravity: 0.7,
+  jumpForce: -13,
+  onGround: true
 };
 
-/* MOVER A LA IZQUIERDA */
+function resizeCanvas() {
+  canvas.width = canvas.clientWidth;
+  canvas.height = canvas.clientHeight;
 
-leftButton.onmousedown =
-function () {
+  groundY = canvas.height - 85;
 
-  moveLeft = true;
-};
+  if (!playing) {
+    player.x = 60;
+    player.y = groundY - player.height;
 
-leftButton.onmouseup =
-function () {
-
-  moveLeft = false;
-};
-
-leftButton.ontouchstart =
-function (event) {
-
-  event.preventDefault();
-
-  moveLeft = true;
-};
-
-leftButton.ontouchend =
-function (event) {
-
-  event.preventDefault();
-
-  moveLeft = false;
-};
-
-/* MOVER A LA DERECHA */
-
-rightButton.onmousedown =
-function () {
-
-  moveRight = true;
-};
-
-rightButton.onmouseup =
-function () {
-
-  moveRight = false;
-};
-
-rightButton.ontouchstart =
-function (event) {
-
-  event.preventDefault();
-
-  moveRight = true;
-};
-
-rightButton.ontouchend =
-function (event) {
-
-  event.preventDefault();
-
-  moveRight = false;
-};
-
-/* SALTAR */
-
-jumpButton.onclick =
-function () {
-
-  jump();
-};
-
-jumpButton.ontouchstart =
-function (event) {
-
-  event.preventDefault();
-
-  jump();
-};
-
-function jump() {
-
-  if (
-    gameStarted &&
-    !jumping
-  ) {
-
-    velocityY = -13;
-
-    jumping = true;
+    draw();
   }
 }
+
+function startGame() {
+  playing = true;
+
+  startScreen.style.display = "none";
+
+  player.x = 60;
+  player.y = groundY - player.height;
+  player.velocityY = 0;
+  player.onGround = true;
+
+  if (!animationStarted) {
+    animationStarted = true;
+    requestAnimationFrame(gameLoop);
+  }
+}
+
+function update() {
+  if (left) {
+    player.x -= player.speed;
+  }
+
+  if (right) {
+    player.x += player.speed;
+  }
+
+  if (player.x < 0) {
+    player.x = 0;
+  }
+
+  if (player.x + player.width > canvas.width) {
+    player.x = canvas.width - player.width;
+  }
+
+  player.velocityY += player.gravity;
+  player.y += player.velocityY;
+
+  if (player.y + player.height >= groundY) {
+    player.y = groundY - player.height;
+    player.velocityY = 0;
+    player.onGround = true;
+  }
+}
+
+function jump() {
+  if (playing && player.onGround) {
+    player.velocityY = player.jumpForce;
+    player.onGround = false;
+  }
+}
+
+function draw() {
+  const background = ctx.createLinearGradient(
+    0,
+    0,
+    0,
+    canvas.height
+  );
+
+  background.addColorStop(0, "#27323c");
+  background.addColorStop(1, "#020304");
+
+  ctx.fillStyle = background;
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  ctx.strokeStyle = "rgba(255,255,255,0.05)";
+
+  for (let x = 0; x < canvas.width; x += 45) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#252d34";
+
+  ctx.fillRect(
+    0,
+    groundY,
+    canvas.width,
+    canvas.height - groundY
+  );
+
+  ctx.fillStyle = "#e8eef2";
+
+  ctx.fillRect(
+    0,
+    groundY,
+    canvas.width,
+    5
+  );
+
+  const doorX = canvas.width - 75;
+
+  ctx.fillStyle = "#dce5ea";
+
+  ctx.fillRect(
+    doorX,
+    groundY - 65,
+    42,
+    65
+  );
+
+  ctx.fillStyle = "#071018";
+
+  ctx.fillRect(
+    doorX + 6,
+    groundY - 58,
+    30,
+    58
+  );
+
+  ctx.shadowColor = "white";
+  ctx.shadowBlur = 15;
+
+  ctx.fillStyle = "white";
+
+  ctx.fillRect(
+    player.x,
+    player.y,
+    player.width,
+    player.height
+  );
+
+  ctx.shadowBlur = 0;
+
+  ctx.fillStyle = "#111";
+
+  ctx.fillRect(
+    player.x + 6,
+    player.y + 10,
+    4,
+    4
+  );
+
+  ctx.fillRect(
+    player.x + 20,
+    player.y + 10,
+    4,
+    4
+  );
+}
+
+function gameLoop() {
+  if (playing) {
+    update();
+    draw();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+/* BOTÓN JUGAR */
+
+startButton.onclick = function () {
+  startGame();
+};
+
+/* BOTÓN IZQUIERDA */
+
+leftButton.onpointerdown = function () {
+  left = true;
+};
+
+leftButton.onpointerup = function () {
+  left = false;
+};
+
+leftButton.onpointercancel = function () {
+  left = false;
+};
+
+/* BOTÓN DERECHA */
+
+rightButton.onpointerdown = function () {
+  right = true;
+};
+
+rightButton.onpointerup = function () {
+  right = false;
+};
+
+rightButton.onpointercancel = function () {
+  right = false;
+};
+
+/* BOTÓN SALTAR */
+
+jumpButton.onclick = function () {
+  jump();
+};
 
 /* TECLADO */
 
-document.onkeydown =
-function (event) {
-
+document.onkeydown = function (event) {
   if (
-    event.key ===
-    "ArrowLeft"
+    event.key === "ArrowLeft" ||
+    event.key.toLowerCase() === "a"
   ) {
-
-    moveLeft = true;
+    left = true;
   }
 
   if (
-    event.key ===
-    "ArrowRight"
+    event.key === "ArrowRight" ||
+    event.key.toLowerCase() === "d"
   ) {
-
-    moveRight = true;
+    right = true;
   }
 
   if (
-    event.key ===
-    "ArrowUp" ||
-    event.key ===
-    " "
+    event.key === "ArrowUp" ||
+    event.key === " "
   ) {
-
     jump();
   }
 };
 
-document.onkeyup =
-function (event) {
-
+document.onkeyup = function (event) {
   if (
-    event.key ===
-    "ArrowLeft"
+    event.key === "ArrowLeft" ||
+    event.key.toLowerCase() === "a"
   ) {
-
-    moveLeft = false;
+    left = false;
   }
 
   if (
-    event.key ===
-    "ArrowRight"
+    event.key === "ArrowRight" ||
+    event.key.toLowerCase() === "d"
   ) {
-
-    moveRight = false;
+    right = false;
   }
 };
 
-/* ACTUALIZAR */
+window.addEventListener(
+  "resize",
+  resizeCanvas
+);
 
-function updateGame() {
-
-  if (moveLeft) {
-
-    playerX -=
-      playerSpeed;
-  }
-
-  if (moveRight) {
-
-    playerX +=
-      playerSpeed;
-  }
-
-  if (playerX < 0) {
-
-    playerX = 0;
-  }
-
-  if (
-    playerX >
-    canvas.width - 30
-  ) {
-
-    playerX =
-      canvas.width - 30;
-  }
-
-  velocityY +=
-    gravity;
-
-  playerY +=
-    velocityY;
-
-  if (
-    playerY + 40 >=
-    groundY
-  ) {
-
-    playerY =
-      groundY - 40;
-
-    velocityY = 0;
-
-    jumping = false;
-  }
-}
-
-/* DIBUJAR */
-
-function drawGame() {
-
-  const background =
-    ctx.createLinearGradient(
-      0,
-      0,
-      0,
-      canvas.height
+resizeCanvas();
