@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -11,95 +11,104 @@
 
 <body>
 
-  <main class="contenedor">
+  <div class="fondo"></div>
 
-    <!-- PANTALLA DE INICIO -->
-    <section id="pantalla-inicio" class="pantalla activa">
+  <main class="app">
 
-      <div class="icono">⚽</div>
+    <!-- INICIO -->
+    <section id="inicio" class="pantalla activa">
 
-      <h1>TRIVIA DE FÚTBOL</h1>
+      <div class="logo">
+        <span>⚽</span>
+      </div>
 
-      <p>
-        Pon a prueba tus conocimientos sobre el deporte rey
+      <p class="etiqueta">FÚTBOL · CONOCIMIENTO · PASIÓN</p>
+
+      <h1>TRIVIA<br><strong>FÚTBOL</strong></h1>
+
+      <p class="descripcion">
+        Demuestra cuánto sabes del deporte más grande del mundo.
       </p>
 
-      <button id="boton-iniciar">
-        COMENZAR A JUGAR
+      <button id="btnComenzar" class="boton-principal">
+        COMENZAR
+        <span>→</span>
       </button>
+
+      <p class="informacion">10 preguntas · 1 punto por respuesta</p>
 
     </section>
 
 
-    <!-- PANTALLA DE PREGUNTAS -->
-    <section id="pantalla-juego" class="pantalla">
+    <!-- JUEGO -->
+    <section id="juego" class="pantalla">
 
-      <div class="encabezado">
+      <header class="encabezado">
 
-        <span id="contador">
-          Pregunta 1 de 10
-        </span>
+        <div>
+          <p class="texto-pequeno">TRIVIA DE FÚTBOL</p>
+          <p id="contador">PREGUNTA 1 DE 10</p>
+        </div>
 
-        <span id="puntos">
-          Puntos: 0
-        </span>
+        <div class="puntos">
+          <span>★</span>
+          <b id="puntos">0</b>
+        </div>
 
+      </header>
+
+
+      <div class="progreso">
+        <div id="barra"></div>
       </div>
 
 
-      <!-- Barra de progreso -->
-      <div class="contenedor-progreso">
-
-        <div id="barra-progreso"></div>
-
+      <div class="numero-pregunta" id="numeroPregunta">
+        01
       </div>
 
 
-      <!-- Pregunta -->
       <h2 id="pregunta">
         Aquí aparecerá la pregunta
       </h2>
 
 
-      <!-- Respuestas -->
-      <div id="opciones">
-
-        <!-- JavaScript pondrá las opciones aquí -->
-
-      </div>
+      <div id="respuestas" class="respuestas"></div>
 
 
-      <!-- Mensaje -->
       <p id="mensaje"></p>
 
 
-      <!-- Botón siguiente -->
-      <button id="boton-siguiente" disabled>
-
-        SIGUIENTE →
-
+      <button id="btnSiguiente" class="boton-principal" disabled>
+        SIGUIENTE
+        <span>→</span>
       </button>
 
     </section>
 
 
-    <!-- PANTALLA FINAL -->
-    <section id="pantalla-final" class="pantalla">
+    <!-- RESULTADO -->
+    <section id="final" class="pantalla">
 
-      <div class="icono">
-        🏆
+      <div class="trofeo">🏆</div>
+
+      <p class="etiqueta">RESULTADO FINAL</p>
+
+      <h1>¡JUEGO<br><strong>TERMINADO!</strong></h1>
+
+      <div class="resultado">
+
+        <span id="resultadoPuntos">0</span>
+
+        <p>DE 10 PUNTOS</p>
+
       </div>
 
-      <h1>¡JUEGO TERMINADO!</h1>
+      <p id="mensajeFinal" class="descripcion"></p>
 
-      <h2 id="resultado"></h2>
-
-      <p id="mensaje-final"></p>
-
-      <button id="boton-reiniciar">
-
-        JUGAR OTRA VEZ
-
+      <button id="btnReiniciar" class="boton-principal">
+        JUGAR DE NUEVO
+        <span>↻</span>
       </button>
 
     </section>
@@ -108,14 +117,12 @@
 
 
   <footer>
-
-    Diseñado por Alejandro Romero
-
+    DISEÑADO POR <strong>ALEJANDRO ROMERO</strong>
   </footer>
 
 
-  <script src="script.js"></script>
+  <!-- IMPORTANTE: EL ARCHIVO SE LLAMA GAME.JS -->
+  <script src="game.js"></script>
 
 </body>
 </html>
-<script src="game.js"></script>
