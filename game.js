@@ -1,250 +1,460 @@
+// ==========================================
+// TRIVIA DE FÚTBOL
+// ==========================================
+
+// PREGUNTAS
+
 const preguntas = [
   {
-    pregunta: "¿Qué selección ha ganado más Copas del Mundo?",
-    opciones: ["Alemania", "Argentina", "Brasil", "Italia"],
+    pregunta: "¿En qué partido Diego Maradona anotó el gol conocido como «La Mano de Dios»?",
+    opciones: [
+      "Argentina vs. Inglaterra, Mundial de 1986",
+      "Argentina vs. Alemania, Mundial de 1986",
+      "Argentina vs. Brasil, Copa América de 1987",
+      "Argentina vs. Italia, Mundial de 1990"
+    ],
+    correcta: 0
+  },
+
+  {
+    pregunta: "¿Cuántos goles anotó Lionel Messi en la Champions League?",
+    opciones: [
+      "112",
+      "121",
+      "129",
+      "131"
+    ],
     correcta: 2
   },
+
   {
-    pregunta: "¿Qué selección ganó el Mundial de 2022?",
-    opciones: ["Francia", "Argentina", "Croacia", "Brasil"],
+    pregunta: "¿Qué selección ganó el primer Mundial de fútbol en 1930?",
+    opciones: [
+      "Argentina",
+      "Uruguay",
+      "Italia",
+      "Brasil"
+    ],
     correcta: 1
   },
+
   {
-    pregunta: "¿Quién es conocido como 'La Pulga'?",
-    opciones: ["Cristiano Ronaldo", "Neymar", "Lionel Messi", "Kylian Mbappé"],
+    pregunta: "¿Qué equipo ganó la Champions League de la temporada 2018-19?",
+    opciones: [
+      "Tottenham Hotspur",
+      "Barcelona",
+      "Liverpool",
+      "Ajax"
+    ],
     correcta: 2
   },
+
   {
-    pregunta: "¿Qué club ha ganado más Champions League?",
-    opciones: ["Barcelona", "Real Madrid", "Milan", "Bayern Múnich"],
-    correcta: 1
-  },
-  {
-    pregunta: "¿De qué país es Cristiano Ronaldo?",
-    opciones: ["España", "Brasil", "Portugal", "Italia"],
+    pregunta: "¿Qué jugador marcó el gol decisivo en la final del Mundial de 2010?",
+    opciones: [
+      "Xavi Hernández",
+      "David Villa",
+      "Andrés Iniesta",
+      "Fernando Torres"
+    ],
     correcta: 2
   },
+
   {
-    pregunta: "¿Qué selección es conocida como 'La Canarinha'?",
-    opciones: ["Argentina", "Brasil", "Colombia", "Portugal"],
+    pregunta: "¿Qué selección perdió la final del Mundial de 1954 ante Alemania Occidental?",
+    opciones: [
+      "Hungría",
+      "Austria",
+      "Suecia",
+      "Checoslovaquia"
+    ],
+    correcta: 0
+  },
+
+  {
+    pregunta: "¿Quién es el máximo goleador histórico de la Champions League?",
+    opciones: [
+      "Lionel Messi",
+      "Robert Lewandowski",
+      "Karim Benzema",
+      "Cristiano Ronaldo"
+    ],
+    correcta: 3
+  },
+
+  {
+    pregunta: "¿Qué club ganó la primera edición de la Copa de Europa en 1956?",
+    opciones: [
+      "Benfica",
+      "Real Madrid",
+      "Milan",
+      "Stade de Reims"
+    ],
     correcta: 1
   },
+
   {
-    pregunta: "¿Qué jugador tiene más Balones de Oro?",
-    opciones: ["Cristiano Ronaldo", "Lionel Messi", "Michel Platini", "Johan Cruyff"],
+    pregunta: "¿Qué jugador anotó un hat-trick en la final del Mundial de 1966?",
+    opciones: [
+      "Bobby Charlton",
+      "Geoff Hurst",
+      "Bobby Moore",
+      "Gerd Müller"
+    ],
     correcta: 1
   },
+
   {
-    pregunta: "¿Qué país ganó el Mundial de 2018?",
-    opciones: ["Croacia", "Francia", "Alemania", "Argentina"],
+    pregunta: "¿Qué país organizó y ganó el Mundial de 1978?",
+    opciones: [
+      "Brasil",
+      "Argentina",
+      "México",
+      "Italia"
+    ],
     correcta: 1
   },
+
   {
-    pregunta: "¿Cuál es el apodo de la selección colombiana?",
-    opciones: ["La Albiceleste", "La Tricolor", "La Roja", "La Canarinha"],
-    correcta: 1
+    pregunta: "¿Qué club ganó la Champions League en la temporada 2011-12?",
+    opciones: [
+      "Bayern Múnich",
+      "Barcelona",
+      "Chelsea",
+      "Real Madrid"
+    ],
+    correcta: 2
   },
+
   {
-    pregunta: "¿Cuántos jugadores tiene un equipo en el campo?",
-    opciones: ["9", "10", "11", "12"],
+    pregunta: "¿Qué selección ganó el Mundial de 2002?",
+    opciones: [
+      "Alemania",
+      "Francia",
+      "Brasil",
+      "Italia"
+    ],
     correcta: 2
   }
 ];
 
+
+// ==========================================
+// VARIABLES
+// ==========================================
+
 let preguntaActual = 0;
 let puntos = 0;
+let respondida = false;
 
 
-/* ELEMENTOS DEL HTML */
+// ==========================================
+// ELEMENTOS DEL HTML
+// ==========================================
 
-const pantallaInicio = document.getElementById("pantalla-inicio");
-const pantallaJuego = document.getElementById("pantalla-juego");
-const pantallaFinal = document.getElementById("pantalla-final");
+const inicio = document.getElementById("inicio");
+const juego = document.getElementById("juego");
+const final = document.getElementById("final");
 
-const botonIniciar = document.getElementById("boton-iniciar");
-const botonSiguiente = document.getElementById("boton-siguiente");
-const botonReiniciar = document.getElementById("boton-reiniciar");
+const btnComenzar = document.getElementById("btnComenzar");
+const btnSiguiente = document.getElementById("btnSiguiente");
+const btnReiniciar = document.getElementById("btnReiniciar");
 
 const contador = document.getElementById("contador");
 const puntosTexto = document.getElementById("puntos");
 
-const barraProgreso = document.getElementById("barra-progreso");
+const barraProgreso = document.getElementById("barraProgreso");
 
+const numeroPregunta = document.getElementById("numeroPregunta");
 const preguntaTexto = document.getElementById("pregunta");
-const opcionesContenedor = document.getElementById("opciones");
+
+const opciones = document.getElementById("opciones");
 
 const mensaje = document.getElementById("mensaje");
 
-const resultado = document.getElementById("resultado");
-const mensajeFinal = document.getElementById("mensaje-final");
+const resultadoPuntos = document.getElementById("resultadoPuntos");
+const mensajeFinal = document.getElementById("mensajeFinal");
 
 
-/* INICIAR EL JUEGO */
+// ==========================================
+// CONECTAR BOTONES
+// ==========================================
 
-botonIniciar.addEventListener("click", iniciarJuego);
+btnComenzar.addEventListener("click", comenzarJuego);
 
-function iniciarJuego() {
+btnSiguiente.addEventListener("click", siguientePregunta);
+
+btnReiniciar.addEventListener("click", reiniciarJuego);
+
+
+// ==========================================
+// COMENZAR EL JUEGO
+// ==========================================
+
+function comenzarJuego() {
 
   preguntaActual = 0;
+
   puntos = 0;
 
-  pantallaInicio.classList.remove("activa");
-  pantallaFinal.classList.remove("activa");
+  respondida = false;
 
-  pantallaJuego.classList.add("activa");
+
+  // Ocultar la portada
+
+  inicio.classList.remove("activa");
+
+
+  // Ocultar el resultado
+
+  final.classList.remove("activa");
+
+
+  // Mostrar el juego
+
+  juego.classList.add("activa");
+
+
+  // Mostrar la primera pregunta
 
   mostrarPregunta();
 
 }
 
 
-/* MOSTRAR LA PREGUNTA */
+// ==========================================
+// MOSTRAR PREGUNTA
+// ==========================================
 
 function mostrarPregunta() {
 
-  const pregunta = preguntas[preguntaActual];
+  const datos = preguntas[preguntaActual];
+
+
+  // Reiniciar respuesta
+
+  respondida = false;
+
+
+  // Mostrar contador
 
   contador.textContent =
-    `Pregunta ${preguntaActual + 1} de ${preguntas.length}`;
+    `PREGUNTA ${preguntaActual + 1} DE ${preguntas.length}`;
+
+
+  // Mostrar puntos
 
   puntosTexto.textContent =
-    `Puntos: ${puntos}`;
+    `${puntos} PUNTOS`;
+
+
+  // Mostrar número grande
+
+  numeroPregunta.textContent =
+    String(preguntaActual + 1).padStart(2, "0");
+
+
+  // Mostrar pregunta
 
   preguntaTexto.textContent =
-    pregunta.pregunta;
+    datos.pregunta;
 
-  opcionesContenedor.innerHTML = "";
+
+  // Borrar respuestas anteriores
+
+  opciones.innerHTML = "";
+
+
+  // Borrar mensaje
 
   mensaje.textContent = "";
 
   mensaje.className = "";
 
-  botonSiguiente.disabled = true;
+
+  // Desactivar siguiente
+
+  btnSiguiente.disabled = true;
 
 
-  /* ACTUALIZAR BARRA */
+  // Cambiar el texto del botón
+
+  if (preguntaActual === preguntas.length - 1) {
+
+    btnSiguiente.innerHTML =
+      "VER RESULTADO <span>→</span>";
+
+  } else {
+
+    btnSiguiente.innerHTML =
+      "SIGUIENTE <span>→</span>";
+
+  }
+
+
+  // Actualizar la barra
 
   const progreso =
     (preguntaActual / preguntas.length) * 100;
+
 
   barraProgreso.style.width =
     `${progreso}%`;
 
 
-  /* CREAR LAS RESPUESTAS */
+  // Crear las respuestas
 
-  pregunta.opciones.forEach((opcion, indice) => {
+  datos.opciones.forEach(function(opcion, indice) {
 
-    const boton = document.createElement("button");
+    const boton =
+      document.createElement("button");
+
+
+    boton.type = "button";
+
 
     boton.textContent = opcion;
 
+
     boton.classList.add("opcion");
 
-    boton.addEventListener(
-      "click",
-      () => revisarRespuesta(indice)
-    );
 
-    opcionesContenedor.appendChild(boton);
+    boton.addEventListener("click", function() {
+
+      revisarRespuesta(indice);
+
+    });
+
+
+    opciones.appendChild(boton);
 
   });
 
 }
 
 
-/* REVISAR RESPUESTA */
+// ==========================================
+// REVISAR RESPUESTA
+// ==========================================
 
-function revisarRespuesta(indiceElegido) {
+function revisarRespuesta(respuestaElegida) {
 
-  const pregunta = preguntas[preguntaActual];
+  // Evitar responder dos veces
+
+  if (respondida) {
+
+    return;
+
+  }
+
+
+  respondida = true;
+
+
+  const datos =
+    preguntas[preguntaActual];
+
 
   const botones =
     document.querySelectorAll(".opcion");
 
 
-  /* DESACTIVAR LAS OPCIONES */
+  // Desactivar todas las respuestas
 
-  botones.forEach((boton) => {
+  botones.forEach(function(boton) {
 
     boton.disabled = true;
 
   });
 
 
-  /* RESPUESTA CORRECTA */
+  // Revisar si es correcta
 
-  if (indiceElegido === pregunta.correcta) {
+  if (respuestaElegida === datos.correcta) {
 
     puntos++;
 
-    mensaje.textContent =
-      "¡Correcto! ⚽";
 
-    mensaje.classList.add(
-      "mensaje-correcto"
-    );
+    mensaje.textContent =
+      "¡RESPUESTA CORRECTA!";
+
+
+    mensaje.className =
+      "correcto";
 
   } else {
 
     mensaje.textContent =
-      `Incorrecto. La respuesta era: ${pregunta.opciones[pregunta.correcta]}`;
+      `INCORRECTO. LA RESPUESTA ERA: ${datos.opciones[datos.correcta]}`;
 
-    mensaje.classList.add(
-      "mensaje-incorrecto"
-    );
+
+    mensaje.className =
+      "incorrecto";
 
   }
 
 
-  /* MOSTRAR LA CORRECTA */
+  // Pintar las respuestas
 
-  botones.forEach((boton, indice) => {
+  botones.forEach(function(boton, indice) {
 
-    if (indice === pregunta.correcta) {
+    // Mostrar la correcta
 
-      boton.classList.add(
-        "correcta"
-      );
+    if (indice === datos.correcta) {
+
+      boton.classList.add("correcta");
 
     }
 
+
+    // Mostrar la incorrecta elegida
+
     if (
-      indice === indiceElegido &&
-      indice !== pregunta.correcta
+      indice === respuestaElegida &&
+      indice !== datos.correcta
     ) {
 
-      boton.classList.add(
-        "incorrecta"
-      );
+      boton.classList.add("incorrecta");
 
     }
 
   });
 
 
-  puntosTexto.textContent =
-    `Puntos: ${puntos}`;
+  // Actualizar los puntos
 
-  botonSiguiente.disabled = false;
+  puntosTexto.textContent =
+    `${puntos} PUNTOS`;
+
+
+  // Activar siguiente
+
+  btnSiguiente.disabled = false;
 
 }
 
 
-/* SIGUIENTE PREGUNTA */
-
-botonSiguiente.addEventListener(
-  "click",
-  siguientePregunta
-);
+// ==========================================
+// SIGUIENTE PREGUNTA
+// ==========================================
 
 function siguientePregunta() {
 
+  // No permitir avanzar sin responder
+
+  if (!respondida) {
+
+    return;
+
+  }
+
+
   preguntaActual++;
 
-  if (
-    preguntaActual < preguntas.length
-  ) {
+
+  // Revisar si quedan preguntas
+
+  if (preguntaActual < preguntas.length) {
 
     mostrarPregunta();
 
@@ -257,74 +467,83 @@ function siguientePregunta() {
 }
 
 
-/* TERMINAR EL JUEGO */
+// ==========================================
+// TERMINAR EL JUEGO
+// ==========================================
 
 function terminarJuego() {
 
-  pantallaJuego.classList.remove(
-    "activa"
-  );
+  // Ocultar preguntas
 
-  pantallaFinal.classList.add(
-    "activa"
-  );
+  juego.classList.remove("activa");
 
 
-  /* COMPLETAR LA BARRA */
+  // Mostrar resultado
 
-  barraProgreso.style.width =
-    "100%";
-
-
-  resultado.textContent =
-    `Obtuviste ${puntos} de ${preguntas.length} puntos`;
+  final.classList.add("activa");
 
 
-  /* MENSAJE SEGÚN EL RESULTADO */
+  // Completar la barra
+
+  barraProgreso.style.width = "100%";
+
+
+  // Mostrar puntaje
+
+  resultadoPuntos.textContent =
+    puntos;
+
+
+  // Mensaje según el puntaje
 
   if (puntos === preguntas.length) {
 
     mensajeFinal.textContent =
-      "¡Perfecto! Eres un verdadero experto del fútbol. 🏆";
+      "RESULTADO PERFECTO. DOMINAS LA HISTORIA Y LOS GRANDES MOMENTOS DEL FÚTBOL.";
+
+  } else if (puntos >= 10) {
+
+    mensajeFinal.textContent =
+      "EXCELENTE RESULTADO. TIENES CONOCIMIENTOS DE VERDADERO ESPECIALISTA.";
 
   } else if (puntos >= 7) {
 
     mensajeFinal.textContent =
-      "¡Muy bien! Tienes grandes conocimientos de fútbol. ⚽";
+      "MUY BUEN RESULTADO. CONOCES BASTANTE SOBRE EL DEPORTE REY.";
 
   } else if (puntos >= 4) {
 
     mensajeFinal.textContent =
-      "Buen intento. Sigue aprendiendo y vuelve a jugar. 👏";
+      "BUEN INTENTO. ALGUNAS PREGUNTAS ERAN PARA VERDADEROS EXPERTOS.";
 
   } else {
 
     mensajeFinal.textContent =
-      "Puedes mejorar. ¡Inténtalo otra vez! ⚽";
+      "EL NIVEL ERA DIFÍCIL. VUELVE A INTENTARLO Y SUPERA TU PUNTAJE.";
 
   }
 
 }
 
 
-/* JUGAR OTRA VEZ */
+// ==========================================
+// JUGAR OTRA VEZ
+// ==========================================
 
-botonReiniciar.addEventListener(
-  "click",
-  volverAlInicio
-);
+function reiniciarJuego() {
 
-function volverAlInicio() {
+  // Ocultar resultado
 
-  pantallaFinal.classList.remove(
-    "activa"
-  );
+  final.classList.remove("activa");
 
-  pantallaInicio.classList.add(
-    "activa"
-  );
 
-  barraProgreso.style.width =
-    "0%";
+  // Mostrar portada
+
+  inicio.classList.add("activa");
+
+
+  // Reiniciar la barra
+
+  barraProgreso.style.width = "0%";
 
 }
