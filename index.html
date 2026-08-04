@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Trivia de Fútbol</title>
 
-  <!-- Conecta el diseño -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -14,55 +14,33 @@
   <main class="contenedor">
 
     <!-- PANTALLA DE INICIO -->
-    <section id="inicio" class="pantalla activa">
+    <section id="pantalla-inicio" class="pantalla activa">
 
-      <div class="balon">⚽</div>
+      <div class="icono">⚽</div>
 
       <h1>TRIVIA DE FÚTBOL</h1>
 
-      <p class="subtitulo">
-        Demuestra cuánto sabes del deporte rey
+      <p>
+        Pon a prueba tus conocimientos sobre el deporte rey
       </p>
 
-      <h2>Escoge una categoría</h2>
-
-      <div class="categorias">
-
-        <button onclick="iniciarJuego('mundiales')">
-          🏆 Mundiales
-        </button>
-
-        <button onclick="iniciarJuego('champions')">
-          ⭐ Champions League
-        </button>
-
-        <button onclick="iniciarJuego('jugadores')">
-          👟 Jugadores
-        </button>
-
-        <button onclick="iniciarJuego('selecciones')">
-          🌎 Selecciones
-        </button>
-
-        <button onclick="iniciarJuego('colombia')">
-          🇨🇴 Fútbol colombiano
-        </button>
-
-      </div>
+      <button id="boton-iniciar">
+        COMENZAR A JUGAR
+      </button>
 
     </section>
 
 
-    <!-- PANTALLA DEL JUEGO -->
-    <section id="juego" class="pantalla">
+    <!-- PANTALLA DE PREGUNTAS -->
+    <section id="pantalla-juego" class="pantalla">
 
-      <div class="barra-superior">
+      <div class="encabezado">
 
-        <span id="categoriaActual">
-          Categoría
+        <span id="contador">
+          Pregunta 1 de 10
         </span>
 
-        <span id="puntaje">
+        <span id="puntos">
           Puntos: 0
         </span>
 
@@ -70,57 +48,58 @@
 
 
       <!-- Barra de progreso -->
-      <div class="progreso">
+      <div class="contenedor-progreso">
 
-        <div id="barraProgreso"></div>
+        <div id="barra-progreso"></div>
 
       </div>
 
 
-      <p id="numeroPregunta">
-        Pregunta 1 de 5
-      </p>
-
-
+      <!-- Pregunta -->
       <h2 id="pregunta">
         Aquí aparecerá la pregunta
       </h2>
 
 
-      <!-- Aquí aparecerán las respuestas -->
-      <div id="respuestas" class="respuestas"></div>
+      <!-- Respuestas -->
+      <div id="opciones">
+
+        <!-- JavaScript pondrá las opciones aquí -->
+
+      </div>
 
 
-      <!-- Mensaje de correcto o incorrecto -->
+      <!-- Mensaje -->
       <p id="mensaje"></p>
 
 
-      <button
-        id="siguiente"
-        onclick="siguientePregunta()"
-        disabled
-      >
-        Siguiente →
+      <!-- Botón siguiente -->
+      <button id="boton-siguiente" disabled>
+
+        SIGUIENTE →
+
       </button>
 
     </section>
 
 
     <!-- PANTALLA FINAL -->
-    <section id="final" class="pantalla">
+    <section id="pantalla-final" class="pantalla">
 
-      <div class="trofeo">
+      <div class="icono">
         🏆
       </div>
 
-      <h1>¡Trivia terminada!</h1>
+      <h1>¡JUEGO TERMINADO!</h1>
 
-      <p id="resultadoFinal"></p>
+      <h2 id="resultado"></h2>
 
-      <p id="mensajeFinal"></p>
+      <p id="mensaje-final"></p>
 
-      <button onclick="volverInicio()">
-        Jugar otra vez
+      <button id="boton-reiniciar">
+
+        JUGAR OTRA VEZ
+
       </button>
 
     </section>
@@ -129,11 +108,12 @@
 
 
   <footer>
+
     Diseñado por Alejandro Romero
+
   </footer>
 
 
-  <!-- Conecta el funcionamiento del juego -->
   <script src="script.js"></script>
 
 </body>
