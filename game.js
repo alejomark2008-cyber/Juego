@@ -1,246 +1,330 @@
-const categoryScreen = document.getElementById("category-screen");
-const quizScreen = document.getElementById("quiz-screen");
-const resultScreen = document.getElementById("result-screen");
-
-const categoryButtons = document.querySelectorAll(".category-button");
-
-const scoreElement = document.getElementById("score");
-const categoryName = document.getElementById("category-name");
-const questionNumber = document.getElementById("question-number");
-const progressBar = document.getElementById("progress-bar");
-const questionText = document.getElementById("question-text");
-const answersElement = document.getElementById("answers");
-const feedback = document.getElementById("feedback");
-
-const finalScore = document.getElementById("final-score");
-const resultMessage = document.getElementById("result-message");
-const playAgainButton = document.getElementById("play-again-button");
-
-
-const categories = {
-
-  videojuegos: {
-    name: "VIDEOJUEGOS",
-
-    questions: [
-
-      {
-        question: "¿Cuál es el personaje principal de Minecraft?",
-        answers: [
-          "Steve",
-          "Mario",
-          "Sonic",
-          "Link"
-        ],
-        correct: 0
-      },
-
-      {
-        question: "¿Qué juego tiene un mapa llamado Battle Royale?",
-        answers: [
-          "Minecraft",
-          "Fortnite",
-          "Among Us",
-          "Roblox"
-        ],
-        correct: 1
-      },
-
-      {
-        question: "¿Qué empresa creó la consola PlayStation?",
-        answers: [
-          "Nintendo",
-          "Microsoft",
-          "Sony",
-          "Sega"
-        ],
-        correct: 2
-      },
-
-      {
-        question: "¿En qué juego aparece Mario?",
-        answers: [
-          "Super Mario Bros.",
-          "Minecraft",
-          "Free Fire",
-          "FIFA"
-        ],
-        correct: 0
-      },
-
-      {
-        question: "¿Qué juego permite construir con bloques?",
-        answers: [
-          "Minecraft",
-          "Pac-Man",
-          "Tetris",
-          "Sonic"
-        ],
-        correct: 0
-      },
-
-      {
-        question: "¿Cuál es el nombre del erizo azul?",
-        answers: [
-          "Crash",
-          "Sonic",
-          "Tails",
-          "Knuckles"
-        ],
-        correct: 1
-      },
-
-      {
-        question: "¿Qué empresa creó Xbox?",
-        answers: [
-          "Apple",
-          "Microsoft",
-          "Sony",
-          "Nintendo"
-        ],
-        correct: 1
-      },
-
-      {
-        question: "¿Qué juego tiene personajes llamados creepers?",
-        answers: [
-          "Roblox",
-          "Fortnite",
-          "Minecraft",
-          "Terraria"
-        ],
-        correct: 2
-      },
-
-      {
-        question: "¿Cuál es el objetivo principal de un juego de carreras?",
-        answers: [
-          "Construir una casa",
-          "Llegar primero a la meta",
-          "Resolver preguntas",
-          "Encontrar letras"
-        ],
-        correct: 1
-      },
-
-      {
-        question: "¿Qué videojuego tiene un personaje llamado Pikachu?",
-        answers: [
-          "Pokémon",
-          "Sonic",
-          "Mario Kart",
-          "Minecraft"
-        ],
-        correct: 0
-      }
-
-    ]
+const preguntas = [
+  {
+    pregunta: "¿Qué selección ha ganado más Copas del Mundo?",
+    opciones: ["Alemania", "Argentina", "Brasil", "Italia"],
+    correcta: 2
   },
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 2022?",
+    opciones: ["Francia", "Argentina", "Croacia", "Brasil"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Quién es conocido como 'La Pulga'?",
+    opciones: ["Cristiano Ronaldo", "Neymar", "Lionel Messi", "Kylian Mbappé"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué club ha ganado más Champions League?",
+    opciones: ["Barcelona", "Real Madrid", "Milan", "Bayern Múnich"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿De qué país es Cristiano Ronaldo?",
+    opciones: ["España", "Brasil", "Portugal", "Italia"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué selección es conocida como 'La Canarinha'?",
+    opciones: ["Argentina", "Brasil", "Colombia", "Portugal"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué jugador tiene más Balones de Oro?",
+    opciones: ["Cristiano Ronaldo", "Lionel Messi", "Michel Platini", "Johan Cruyff"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué país ganó el Mundial de 2018?",
+    opciones: ["Croacia", "Francia", "Alemania", "Argentina"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Cuál es el apodo de la selección colombiana?",
+    opciones: ["La Albiceleste", "La Tricolor", "La Roja", "La Canarinha"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Cuántos jugadores tiene un equipo en el campo?",
+    opciones: ["9", "10", "11", "12"],
+    correcta: 2
+  }
+];
+
+let preguntaActual = 0;
+let puntos = 0;
 
 
-  futbol: {
-    name: "FÚTBOL",
+/* ELEMENTOS DEL HTML */
 
-    questions: [
+const pantallaInicio = document.getElementById("pantalla-inicio");
+const pantallaJuego = document.getElementById("pantalla-juego");
+const pantallaFinal = document.getElementById("pantalla-final");
 
-      {
-        question: "¿Cuántos jugadores tiene un equipo en el campo?",
-        answers: [
-          "9",
-          "10",
-          "11",
-          "12"
-        ],
-        correct: 2
-      },
+const botonIniciar = document.getElementById("boton-iniciar");
+const botonSiguiente = document.getElementById("boton-siguiente");
+const botonReiniciar = document.getElementById("boton-reiniciar");
 
-      {
-        question: "¿Cuánto dura normalmente un partido de fútbol?",
-        answers: [
-          "60 minutos",
-          "80 minutos",
-          "90 minutos",
-          "100 minutos"
-        ],
-        correct: 2
-      },
+const contador = document.getElementById("contador");
+const puntosTexto = document.getElementById("puntos");
 
-      {
-        question: "¿Qué país ganó el Mundial de 2022?",
-        answers: [
-          "Francia",
-          "Argentina",
-          "Brasil",
-          "España"
-        ],
-        correct: 1
-      },
+const barraProgreso = document.getElementById("barra-progreso");
 
-      {
-        question: "¿Cómo se llama la máxima competición de selecciones?",
-        answers: [
-          "Champions League",
-          "Copa Mundial",
-          "Copa Libertadores",
-          "Premier League"
-        ],
-        correct: 1
-      },
+const preguntaTexto = document.getElementById("pregunta");
+const opcionesContenedor = document.getElementById("opciones");
 
-      {
-        question: "¿Cuántos puntos vale una victoria normalmente?",
-        answers: [
-          "1",
-          "2",
-          "3",
-          "4"
-        ],
-        correct: 2
-      },
+const mensaje = document.getElementById("mensaje");
 
-      {
-        question: "¿Qué jugador es conocido como CR7?",
-        answers: [
-          "Lionel Messi",
-          "Cristiano Ronaldo",
-          "Neymar",
-          "Kylian Mbappé"
-        ],
-        correct: 1
-      },
+const resultado = document.getElementById("resultado");
+const mensajeFinal = document.getElementById("mensaje-final");
 
-      {
-        question: "¿Qué tarjeta expulsa a un jugador?",
-        answers: [
-          "Azul",
-          "Verde",
-          "Amarilla",
-          "Roja"
-        ],
-        correct: 3
-      },
 
-      {
-        question: "¿Cómo se llama el jugador que protege la portería?",
-        answers: [
-          "Delantero",
-          "Arquero",
-          "Defensa",
-          "Mediocampista"
-        ],
-        correct: 1
-      },
+/* INICIAR EL JUEGO */
 
-      {
-        question: "¿Qué país es conocido por la selección Canarinha?",
-        answers: [
-          "Brasil",
-          "Colombia",
-          "Portugal",
-          "Italia"
-        ],
-        correct: 0
-      },
+botonIniciar.addEventListener("click", iniciarJuego);
 
-      {
-        question: "
+function iniciarJuego() {
+
+  preguntaActual = 0;
+  puntos = 0;
+
+  pantallaInicio.classList.remove("activa");
+  pantallaFinal.classList.remove("activa");
+
+  pantallaJuego.classList.add("activa");
+
+  mostrarPregunta();
+
+}
+
+
+/* MOSTRAR LA PREGUNTA */
+
+function mostrarPregunta() {
+
+  const pregunta = preguntas[preguntaActual];
+
+  contador.textContent =
+    `Pregunta ${preguntaActual + 1} de ${preguntas.length}`;
+
+  puntosTexto.textContent =
+    `Puntos: ${puntos}`;
+
+  preguntaTexto.textContent =
+    pregunta.pregunta;
+
+  opcionesContenedor.innerHTML = "";
+
+  mensaje.textContent = "";
+
+  mensaje.className = "";
+
+  botonSiguiente.disabled = true;
+
+
+  /* ACTUALIZAR BARRA */
+
+  const progreso =
+    (preguntaActual / preguntas.length) * 100;
+
+  barraProgreso.style.width =
+    `${progreso}%`;
+
+
+  /* CREAR LAS RESPUESTAS */
+
+  pregunta.opciones.forEach((opcion, indice) => {
+
+    const boton = document.createElement("button");
+
+    boton.textContent = opcion;
+
+    boton.classList.add("opcion");
+
+    boton.addEventListener(
+      "click",
+      () => revisarRespuesta(indice)
+    );
+
+    opcionesContenedor.appendChild(boton);
+
+  });
+
+}
+
+
+/* REVISAR RESPUESTA */
+
+function revisarRespuesta(indiceElegido) {
+
+  const pregunta = preguntas[preguntaActual];
+
+  const botones =
+    document.querySelectorAll(".opcion");
+
+
+  /* DESACTIVAR LAS OPCIONES */
+
+  botones.forEach((boton) => {
+
+    boton.disabled = true;
+
+  });
+
+
+  /* RESPUESTA CORRECTA */
+
+  if (indiceElegido === pregunta.correcta) {
+
+    puntos++;
+
+    mensaje.textContent =
+      "¡Correcto! ⚽";
+
+    mensaje.classList.add(
+      "mensaje-correcto"
+    );
+
+  } else {
+
+    mensaje.textContent =
+      `Incorrecto. La respuesta era: ${pregunta.opciones[pregunta.correcta]}`;
+
+    mensaje.classList.add(
+      "mensaje-incorrecto"
+    );
+
+  }
+
+
+  /* MOSTRAR LA CORRECTA */
+
+  botones.forEach((boton, indice) => {
+
+    if (indice === pregunta.correcta) {
+
+      boton.classList.add(
+        "correcta"
+      );
+
+    }
+
+    if (
+      indice === indiceElegido &&
+      indice !== pregunta.correcta
+    ) {
+
+      boton.classList.add(
+        "incorrecta"
+      );
+
+    }
+
+  });
+
+
+  puntosTexto.textContent =
+    `Puntos: ${puntos}`;
+
+  botonSiguiente.disabled = false;
+
+}
+
+
+/* SIGUIENTE PREGUNTA */
+
+botonSiguiente.addEventListener(
+  "click",
+  siguientePregunta
+);
+
+function siguientePregunta() {
+
+  preguntaActual++;
+
+  if (
+    preguntaActual < preguntas.length
+  ) {
+
+    mostrarPregunta();
+
+  } else {
+
+    terminarJuego();
+
+  }
+
+}
+
+
+/* TERMINAR EL JUEGO */
+
+function terminarJuego() {
+
+  pantallaJuego.classList.remove(
+    "activa"
+  );
+
+  pantallaFinal.classList.add(
+    "activa"
+  );
+
+
+  /* COMPLETAR LA BARRA */
+
+  barraProgreso.style.width =
+    "100%";
+
+
+  resultado.textContent =
+    `Obtuviste ${puntos} de ${preguntas.length} puntos`;
+
+
+  /* MENSAJE SEGÚN EL RESULTADO */
+
+  if (puntos === preguntas.length) {
+
+    mensajeFinal.textContent =
+      "¡Perfecto! Eres un verdadero experto del fútbol. 🏆";
+
+  } else if (puntos >= 7) {
+
+    mensajeFinal.textContent =
+      "¡Muy bien! Tienes grandes conocimientos de fútbol. ⚽";
+
+  } else if (puntos >= 4) {
+
+    mensajeFinal.textContent =
+      "Buen intento. Sigue aprendiendo y vuelve a jugar. 👏";
+
+  } else {
+
+    mensajeFinal.textContent =
+      "Puedes mejorar. ¡Inténtalo otra vez! ⚽";
+
+  }
+
+}
+
+
+/* JUGAR OTRA VEZ */
+
+botonReiniciar.addEventListener(
+  "click",
+  volverAlInicio
+);
+
+function volverAlInicio() {
+
+  pantallaFinal.classList.remove(
+    "activa"
+  );
+
+  pantallaInicio.classList.add(
+    "activa"
+  );
+
+  barraProgreso.style.width =
+    "0%";
+
+}
