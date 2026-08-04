@@ -1,115 +1,223 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Trivia de Fútbol</title>
+  <title>Trivia de Fútbol | Desafío</title>
 
+  <!-- Archivo de estilos -->
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="fondo"></div>
+  <main class="pagina">
 
-  <main class="app">
-
-    <!-- INICIO -->
+    <!-- PANEL PRINCIPAL -->
     <section id="inicio" class="pantalla activa">
 
-      <div class="logo">
-        <span>⚽</span>
+      <!-- PARTE IZQUIERDA -->
+      <div class="portada-izquierda">
+
+        <div class="marca">
+          <span class="punto"></span>
+          FOOTBALL QUIZ
+        </div>
+
+        <div class="linea-vertical"></div>
+
+        <div class="contenido-portada">
+
+          <p class="categoria">
+            CONOCIMIENTO · HISTORIA · PASIÓN
+          </p>
+
+          <h1>
+            TRIVIA<br>
+            <span>FÚTBOL</span>
+          </h1>
+
+          <p class="descripcion">
+            Pon a prueba tus conocimientos con preguntas
+            difíciles sobre Mundiales, Champions League,
+            récords, jugadores y momentos históricos.
+          </p>
+
+          <button id="btnComenzar" type="button">
+            <span>COMENZAR TRIVIA</span>
+            <strong>→</strong>
+          </button>
+
+          <p class="datos">
+            12 PREGUNTAS · NIVEL DIFÍCIL
+          </p>
+
+        </div>
+
+        <div class="linea-inferior"></div>
+
       </div>
 
-      <p class="etiqueta">FÚTBOL · CONOCIMIENTO · PASIÓN</p>
 
-      <h1>TRIVIA<br><strong>FÚTBOL</strong></h1>
+      <!-- PARTE DERECHA -->
+      <div class="portada-derecha">
 
-      <p class="descripcion">
-        Demuestra cuánto sabes del deporte más grande del mundo.
-      </p>
+        <div class="numero-fondo">
+          10
+        </div>
 
-      <button id="btnComenzar" class="boton-principal">
-        COMENZAR
-        <span>→</span>
-      </button>
+        <div class="circulo-principal">
+          <div class="balon">
+            ⚽
+          </div>
+        </div>
 
-      <p class="informacion">10 preguntas · 1 punto por respuesta</p>
+        <div class="texto-lateral">
+          THE BEAUTIFUL GAME
+        </div>
+
+        <div class="detalle-superior">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="frase">
+          EL FÚTBOL ES<br>
+          HISTORIA
+        </div>
+
+      </div>
 
     </section>
 
 
-    <!-- JUEGO -->
+    <!-- PANTALLA DEL JUEGO -->
     <section id="juego" class="pantalla">
 
-      <header class="encabezado">
+      <header class="encabezado-juego">
 
-        <div>
-          <p class="texto-pequeno">TRIVIA DE FÚTBOL</p>
-          <p id="contador">PREGUNTA 1 DE 10</p>
+        <div class="titulo-pequeno">
+          <span class="punto"></span>
+          FOOTBALL QUIZ
         </div>
 
-        <div class="puntos">
-          <span>★</span>
-          <b id="puntos">0</b>
+        <div class="marcador">
+
+          <span id="contador">
+            PREGUNTA 1 DE 12
+          </span>
+
+          <span id="puntos">
+            0 PUNTOS
+          </span>
+
         </div>
 
       </header>
 
 
+      <!-- BARRA DE PROGRESO -->
       <div class="progreso">
-        <div id="barra"></div>
+
+        <div id="barraProgreso"></div>
+
       </div>
 
 
-      <div class="numero-pregunta" id="numeroPregunta">
+      <!-- NÚMERO DECORATIVO -->
+      <div id="numeroPregunta" class="numero-pregunta">
         01
       </div>
 
 
+      <!-- PREGUNTA -->
       <h2 id="pregunta">
         Aquí aparecerá la pregunta
       </h2>
 
 
-      <div id="respuestas" class="respuestas"></div>
+      <!-- OPCIONES -->
+      <div id="opciones" class="opciones">
+
+        <!-- Las respuestas se crean desde game.js -->
+
+      </div>
 
 
+      <!-- MENSAJE -->
       <p id="mensaje"></p>
 
 
-      <button id="btnSiguiente" class="boton-principal" disabled>
+      <!-- BOTÓN SIGUIENTE -->
+      <button
+        id="btnSiguiente"
+        class="boton-siguiente"
+        type="button"
+        disabled
+      >
+
         SIGUIENTE
+
         <span>→</span>
+
       </button>
 
     </section>
 
 
-    <!-- RESULTADO -->
+    <!-- PANTALLA FINAL -->
     <section id="final" class="pantalla">
 
-      <div class="trofeo">🏆</div>
+      <div class="resultado-izquierda">
 
-      <p class="etiqueta">RESULTADO FINAL</p>
+        <p class="categoria">
+          RESULTADO FINAL
+        </p>
 
-      <h1>¡JUEGO<br><strong>TERMINADO!</strong></h1>
+        <h1>
+          DESAFÍO<br>
+          <span>COMPLETADO</span>
+        </h1>
 
-      <div class="resultado">
+        <p id="mensajeFinal" class="descripcion">
+          Aquí aparecerá el resultado.
+        </p>
 
-        <span id="resultadoPuntos">0</span>
+        <button
+          id="btnReiniciar"
+          type="button"
+        >
 
-        <p>DE 10 PUNTOS</p>
+          <span>JUGAR DE NUEVO</span>
+
+          <strong>↻</strong>
+
+        </button>
 
       </div>
 
-      <p id="mensajeFinal" class="descripcion"></p>
 
-      <button id="btnReiniciar" class="boton-principal">
-        JUGAR DE NUEVO
-        <span>↻</span>
-      </button>
+      <div class="resultado-derecha">
+
+        <div class="puntuacion">
+
+          <span id="resultadoPuntos">
+            0
+          </span>
+
+          <small>
+            DE 12 PUNTOS
+          </small>
+
+        </div>
+
+        <div class="decoracion-final">
+          ⚽
+        </div>
+
+      </div>
 
     </section>
 
@@ -117,11 +225,18 @@
 
 
   <footer>
-    DISEÑADO POR <strong>ALEJANDRO ROMERO</strong>
+
+    DISEÑADO POR
+
+    <strong>
+      ALEJANDRO ROMERO
+    </strong>
+
   </footer>
 
 
-  <!-- IMPORTANTE: EL ARCHIVO SE LLAMA GAME.JS -->
+  <!-- IMPORTANTE:
+       El archivo debe llamarse exactamente game.js -->
   <script src="game.js"></script>
 
 </body>
