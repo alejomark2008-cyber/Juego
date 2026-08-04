@@ -1,10 +1,9 @@
 // ==========================================
-// TRIVIA DE FÚTBOL
+// TRIVIA DE FÚTBOL - 30 PREGUNTAS
 // ==========================================
 
-// PREGUNTAS
-
 const preguntas = [
+
   {
     pregunta: "¿En qué partido Diego Maradona anotó el gol conocido como «La Mano de Dios»?",
     opciones: [
@@ -135,7 +134,206 @@ const preguntas = [
       "Italia"
     ],
     correcta: 2
+  },
+
+  {
+    pregunta: "¿Quién marcó el famoso gol conocido como «el Gol del Siglo» en el Mundial de 1986?",
+    opciones: [
+      "Jorge Valdano",
+      "Diego Maradona",
+      "Mario Kempes",
+      "Gabriel Batistuta"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 1998?",
+    opciones: [
+      "Brasil",
+      "Italia",
+      "Francia",
+      "Alemania"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué equipo ganó la Champions League de la temporada 2019-20?",
+    opciones: [
+      "Paris Saint-Germain",
+      "Bayern Múnich",
+      "Manchester City",
+      "Liverpool"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Quién anotó el gol que dio a España su primer Mundial?",
+    opciones: [
+      "Fernando Torres",
+      "David Villa",
+      "Andrés Iniesta",
+      "Cesc Fàbregas"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 2014?",
+    opciones: [
+      "Argentina",
+      "Brasil",
+      "Alemania",
+      "Países Bajos"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué club ganó la Champions League de la temporada 2004-05?",
+    opciones: [
+      "Milan",
+      "Liverpool",
+      "Chelsea",
+      "Juventus"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué jugador ganó el Balón de Oro de 2007?",
+    opciones: [
+      "Lionel Messi",
+      "Kaká",
+      "Cristiano Ronaldo",
+      "Ronaldinho"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 2006?",
+    opciones: [
+      "Francia",
+      "Italia",
+      "Alemania",
+      "Brasil"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué equipo ganó la Champions League de la temporada 2013-14?",
+    opciones: [
+      "Atlético de Madrid",
+      "Real Madrid",
+      "Bayern Múnich",
+      "Barcelona"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué jugador marcó el gol de la victoria de Alemania en la final del Mundial de 2014?",
+    opciones: [
+      "Thomas Müller",
+      "Miroslav Klose",
+      "Mario Götze",
+      "Toni Kroos"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué selección ganó la Eurocopa de 2004?",
+    opciones: [
+      "Portugal",
+      "Grecia",
+      "Francia",
+      "República Checa"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué club ganó la Champions League de la temporada 2008-09?",
+    opciones: [
+      "Manchester United",
+      "Barcelona",
+      "Chelsea",
+      "Arsenal"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Quién fue el máximo goleador del Mundial de 2002?",
+    opciones: [
+      "Ronaldo Nazário",
+      "Miroslav Klose",
+      "Rivaldo",
+      "Ronaldinho"
+    ],
+    correcta: 0
+  },
+
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 2022?",
+    opciones: [
+      "Francia",
+      "Croacia",
+      "Argentina",
+      "Marruecos"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué club ganó la Champions League de la temporada 2022-23?",
+    opciones: [
+      "Inter de Milán",
+      "Manchester City",
+      "Real Madrid",
+      "Bayern Múnich"
+    ],
+    correcta: 1
+  },
+
+  {
+    pregunta: "¿Qué jugador ganó el Balón de Oro de 2002?",
+    opciones: [
+      "Ronaldo Nazário",
+      "Zinedine Zidane",
+      "Roberto Carlos",
+      "Rivaldo"
+    ],
+    correcta: 0
+  },
+
+  {
+    pregunta: "¿Qué selección ganó el Mundial de 1974?",
+    opciones: [
+      "Países Bajos",
+      "Brasil",
+      "Alemania Occidental",
+      "Italia"
+    ],
+    correcta: 2
+  },
+
+  {
+    pregunta: "¿Qué club ganó la Champions League de la temporada 2016-17?",
+    opciones: [
+      "Juventus",
+      "Real Madrid",
+      "Atlético de Madrid",
+      "Barcelona"
+    ],
+    correcta: 1
   }
+
 ];
 
 
@@ -181,41 +379,24 @@ const mensajeFinal = document.getElementById("mensajeFinal");
 // ==========================================
 
 btnComenzar.addEventListener("click", comenzarJuego);
-
 btnSiguiente.addEventListener("click", siguientePregunta);
-
 btnReiniciar.addEventListener("click", reiniciarJuego);
 
 
 // ==========================================
-// COMENZAR EL JUEGO
+// COMENZAR
 // ==========================================
 
 function comenzarJuego() {
 
   preguntaActual = 0;
-
   puntos = 0;
-
   respondida = false;
 
-
-  // Ocultar la portada
-
   inicio.classList.remove("activa");
-
-
-  // Ocultar el resultado
-
   final.classList.remove("activa");
 
-
-  // Mostrar el juego
-
   juego.classList.add("activa");
-
-
-  // Mostrar la primera pregunta
 
   mostrarPregunta();
 
@@ -230,54 +411,26 @@ function mostrarPregunta() {
 
   const datos = preguntas[preguntaActual];
 
-
-  // Reiniciar respuesta
-
   respondida = false;
-
-
-  // Mostrar contador
 
   contador.textContent =
     `PREGUNTA ${preguntaActual + 1} DE ${preguntas.length}`;
 
-
-  // Mostrar puntos
-
   puntosTexto.textContent =
     `${puntos} PUNTOS`;
-
-
-  // Mostrar número grande
 
   numeroPregunta.textContent =
     String(preguntaActual + 1).padStart(2, "0");
 
-
-  // Mostrar pregunta
-
   preguntaTexto.textContent =
     datos.pregunta;
 
-
-  // Borrar respuestas anteriores
-
   opciones.innerHTML = "";
 
-
-  // Borrar mensaje
-
   mensaje.textContent = "";
-
   mensaje.className = "";
 
-
-  // Desactivar siguiente
-
   btnSiguiente.disabled = true;
-
-
-  // Cambiar el texto del botón
 
   if (preguntaActual === preguntas.length - 1) {
 
@@ -291,40 +444,28 @@ function mostrarPregunta() {
 
   }
 
-
-  // Actualizar la barra
-
   const progreso =
     (preguntaActual / preguntas.length) * 100;
 
-
   barraProgreso.style.width =
     `${progreso}%`;
-
-
-  // Crear las respuestas
 
   datos.opciones.forEach(function(opcion, indice) {
 
     const boton =
       document.createElement("button");
 
-
     boton.type = "button";
-
 
     boton.textContent = opcion;
 
-
     boton.classList.add("opcion");
-
 
     boton.addEventListener("click", function() {
 
       revisarRespuesta(indice);
 
     });
-
 
     opciones.appendChild(boton);
 
@@ -339,27 +480,19 @@ function mostrarPregunta() {
 
 function revisarRespuesta(respuestaElegida) {
 
-  // Evitar responder dos veces
-
   if (respondida) {
 
     return;
 
   }
 
-
   respondida = true;
-
 
   const datos =
     preguntas[preguntaActual];
 
-
   const botones =
     document.querySelectorAll(".opcion");
-
-
-  // Desactivar todas las respuestas
 
   botones.forEach(function(boton) {
 
@@ -367,17 +500,12 @@ function revisarRespuesta(respuestaElegida) {
 
   });
 
-
-  // Revisar si es correcta
-
   if (respuestaElegida === datos.correcta) {
 
     puntos++;
 
-
     mensaje.textContent =
       "¡RESPUESTA CORRECTA!";
-
 
     mensaje.className =
       "correcto";
@@ -387,27 +515,18 @@ function revisarRespuesta(respuestaElegida) {
     mensaje.textContent =
       `INCORRECTO. LA RESPUESTA ERA: ${datos.opciones[datos.correcta]}`;
 
-
     mensaje.className =
       "incorrecto";
 
   }
 
-
-  // Pintar las respuestas
-
   botones.forEach(function(boton, indice) {
-
-    // Mostrar la correcta
 
     if (indice === datos.correcta) {
 
       boton.classList.add("correcta");
 
     }
-
-
-    // Mostrar la incorrecta elegida
 
     if (
       indice === respuestaElegida &&
@@ -420,14 +539,8 @@ function revisarRespuesta(respuestaElegida) {
 
   });
 
-
-  // Actualizar los puntos
-
   puntosTexto.textContent =
     `${puntos} PUNTOS`;
-
-
-  // Activar siguiente
 
   btnSiguiente.disabled = false;
 
@@ -435,12 +548,10 @@ function revisarRespuesta(respuestaElegida) {
 
 
 // ==========================================
-// SIGUIENTE PREGUNTA
+// SIGUIENTE
 // ==========================================
 
 function siguientePregunta() {
-
-  // No permitir avanzar sin responder
 
   if (!respondida) {
 
@@ -448,11 +559,7 @@ function siguientePregunta() {
 
   }
 
-
   preguntaActual++;
-
-
-  // Revisar si quedan preguntas
 
   if (preguntaActual < preguntas.length) {
 
@@ -468,50 +575,36 @@ function siguientePregunta() {
 
 
 // ==========================================
-// TERMINAR EL JUEGO
+// TERMINAR
 // ==========================================
 
 function terminarJuego() {
 
-  // Ocultar preguntas
-
   juego.classList.remove("activa");
-
-
-  // Mostrar resultado
 
   final.classList.add("activa");
 
-
-  // Completar la barra
-
   barraProgreso.style.width = "100%";
-
-
-  // Mostrar puntaje
 
   resultadoPuntos.textContent =
     puntos;
-
-
-  // Mensaje según el puntaje
 
   if (puntos === preguntas.length) {
 
     mensajeFinal.textContent =
       "RESULTADO PERFECTO. DOMINAS LA HISTORIA Y LOS GRANDES MOMENTOS DEL FÚTBOL.";
 
-  } else if (puntos >= 10) {
+  } else if (puntos >= 25) {
 
     mensajeFinal.textContent =
       "EXCELENTE RESULTADO. TIENES CONOCIMIENTOS DE VERDADERO ESPECIALISTA.";
 
-  } else if (puntos >= 7) {
+  } else if (puntos >= 18) {
 
     mensajeFinal.textContent =
       "MUY BUEN RESULTADO. CONOCES BASTANTE SOBRE EL DEPORTE REY.";
 
-  } else if (puntos >= 4) {
+  } else if (puntos >= 10) {
 
     mensajeFinal.textContent =
       "BUEN INTENTO. ALGUNAS PREGUNTAS ERAN PARA VERDADEROS EXPERTOS.";
@@ -527,23 +620,15 @@ function terminarJuego() {
 
 
 // ==========================================
-// JUGAR OTRA VEZ
+// REINICIAR
 // ==========================================
 
 function reiniciarJuego() {
 
-  // Ocultar resultado
-
   final.classList.remove("activa");
-
-
-  // Mostrar portada
 
   inicio.classList.add("activa");
 
-
-  // Reiniciar la barra
-
   barraProgreso.style.width = "0%";
 
-}
+      }
